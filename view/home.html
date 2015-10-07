@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Home page - Chat Room</title>
+    <style type="text/css">
+    html {font-size: 62.5%}
+    html,body,div,ul,li,p,input {padding: 0;margin: 0;border: 0;outline: 0}
+    a {outline: 0;text-decoration: none}
+    body {font-size: 10px;font-family: "Helvetica Neue",Helvetica,STHeiTi,sans-serif;margin-top: 0;}
+    img,video {vertical-align: bottom}
+    ul {list-style-type: none}
+    .hidden{
+        display: none !important;
+    }
+    .main{
+        width: 90%;
+        max-width: 960px;
+        margin: 0 auto;
+    }
+    .msg-box{}
+    .msg-list{}
+    .msg-item{}
+    .msg-wrapper{}
+    .msg-sender{}
+    .msg-content{}
+    .my-box{}
+    .info-input{}
+    .text-box{
+        font-size: 14px;
+        width: 100%;
+        resize: none;
+    }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="header">
+            <div class="room-info">
+                You're in Room <span id="roomId"></span>
+            </div>
+            <button id="leaveBtn" class="act-btn2">Leave chat room</button>
+        </div>
+        <div class="msg-box">
+            <ul id="msgList" class="msg-list"></ul>
+        </div>
+        <div class="my-box">
+            <textarea id="myMsg" class="text-box" rows="6"></textarea>
+            <button id="submitBtn" class="act-btn">Submit</button>
+        </div>
+
+        <!-- select room dialog [start] -->
+        <div id="selectRoom" class="mask">
+            <div class="dialog">
+                <p>Please input user info below.</p>
+                <p>
+                    <label>New Room: </label>
+                    <input type="checkbox" id="newRoom" class="info-input" value="1">
+                </p>
+                <p id="roomRow">
+                    <label>Room ID: </label>
+                    <input type="text" id="myRoomId" class="info-input" maxLength="6" placeholder="Room ID">
+                </p>
+                <p>
+                    <label>User Name: </label>
+                    <input type="text" id="myName" class="info-input" maxLength="20" placeholder="Please input your name">
+                </p>
+                <button id="submitInfo" class="act-btn3">Done</button>
+            </div>
+        </div>
+        <!-- select room dialog [end] -->
+    </div>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        /* 信息输入框 [start] */
+        $('#newRoom').click(function(){
+            if(this.checked){
+                $('#roomRow').addClass('hidden');
+            }else{
+                $('#roomRow').removeClass('hidden');
+            }
+        });
+        $('#submitInfo').click(function(){
+            // TODO - validate
+            $.ajax({
+                url: '/select',
+                data: {
+                    'newRoom': $('#newRoom').get(0).checked ? $('#newRoom').val() : '0',
+                    'myRoomId': $('#myRoomId').val(),
+                    'myName': $('#myName').val(),
+                },
+                dataType: 'json',
+                success: function(rs){
+                    $('#selectRoom').addClass('hidden');
+                    // TODO
+                },
+                error: function(rs){
+                    $('#selectRoom').addClass('hidden');
+                    // TODO
+                }
+            })
+        });
+        /* 信息输入框 [end] */
+    })
+    </script>
+</body>
+</html>
