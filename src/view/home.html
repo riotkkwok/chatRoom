@@ -31,6 +31,8 @@
         width: 100%;
         resize: none;
     }
+    #toast{}
+    #toast.show-toast{}
     </style>
 </head>
 <body>
@@ -191,9 +193,9 @@
         function toast(str){
             // TODO - 添加Deferred
             console.log('toast: '+str);
-            $('#toast').text(str).addClass('show_toast');
+            $('#toast').text(str).addClass('show-toast');
             setTimeout(function(){
-                $('#toast').text('').removeClass('show_toast');
+                $('#toast').text('').removeClass('show-toast');
             }, 3000);
         }
 
