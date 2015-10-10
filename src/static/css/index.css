@@ -1,0 +1,29 @@
+html {font-size: 62.5%}
+html,body,div,ul,li,p,input {padding: 0;margin: 0;border: 0;outline: 0}
+a {outline: 0;text-decoration: none}
+body {font-size: 10px;font-family: "Helvetica Neue",Helvetica,STHeiTi,sans-serif;margin-top: 0;}
+img,video {vertical-align: bottom}
+ul {list-style-type: none}
+.hidden{
+    display: none !important;
+}
+.main{
+    width: 90%;
+    max-width: 960px;
+    margin: 0 auto;
+}
+.msg-box{}
+.msg-list{}
+.msg-item{}
+.msg-wrapper{}
+.msg-sender{}
+.msg-content{}
+.my-box{}
+.info-input{}
+.text-box{
+    font-size: 14px;
+    width: 100%;
+    resize: none;
+}
+#toast{}
+#toast.show-toast{}
