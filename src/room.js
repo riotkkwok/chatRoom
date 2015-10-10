@@ -1,7 +1,8 @@
+var MAX_SIZE = 5;
+
 function Room(id, userLs){
     this.id = id || null;
     this.users = userLs || [];
-    this.MAX_SIZE = 5;
 }
 
 Room.prototype.getId = function() {
