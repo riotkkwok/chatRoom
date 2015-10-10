@@ -1,6 +1,7 @@
 var server = require("./server");
 var router = require("./router");
 var reqHandlers = require("./requestHandlers");
+var staticReader = require("./staticReader");
 
 var handle = {};
 handle['/'] = reqHandlers.start;
@@ -9,5 +10,7 @@ handle['/select'] = reqHandlers.getIn;
 handle['/send'] = reqHandlers.send;
 handle['/check'] = reqHandlers.check;
 handle['/end'] = reqHandlers.end;
+handle.staticReader = staticReader.readFile;
+
 
 server.start(router.route, handle);

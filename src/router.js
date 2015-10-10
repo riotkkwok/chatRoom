@@ -10,6 +10,10 @@ function route(handle, pathname, resp, req){
             resp.end();
         }
     }else{
+        if(/\.[a-zA-Z]{1,5}$/.test(pathname)){
+            handle.staticReader(resp, req);
+            return;
+        }
         console.log("No request handler found for " + pathname);
         resp.writeHead(404, {"Content-Type": "text/plain"});
         resp.write("404 Not Found");
