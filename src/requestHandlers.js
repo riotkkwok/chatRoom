@@ -23,14 +23,14 @@ function createUser(name, roomId){
         return 0;
     }else{
         for(var i=0; i<userList.length; i++){
-            if(i < userList[i].id){
-                newItem.setId(i);
+            if(i + 1 < userList[i].id){
+                newItem.setId(i+1);
                 tmp = userList.splice(i);
                 userList = userList.concat(newItem).concat(tmp);
                 break;
             }
             if(i + 1 === userList.length){
-                newItem.setId(userList.length);
+                newItem.setId(userList.length+1);
                 userList.push(newItem);
                 break;
             }
@@ -50,14 +50,14 @@ function createRoom(userId){
         return 0;
     }else{
         for(var i=0; i<roomList.length; i++){
-            if(i < roomList[i].id){
-                newItem.setId(i);
+            if(i + 1 < roomList[i].id){
+                newItem.setId(i+1);
                 tmp = roomList.splice(i);
                 roomList = roomList.concat(newItem).concat(tmp);
                 break;
             }
             if(i + 1 === roomList.length){
-                newItem.setId(roomList.length);
+                newItem.setId(roomList.length+1);
                 roomList.push(newItem);
                 break;
             }
@@ -134,6 +134,8 @@ function getIn(resp, req){
 
     if(isDebug){
         console.log('DEBUG: '+url.parse(req.url, false).query);
+        console.log('DEBUG: '+JSON.stringify(userList));
+        console.log('DEBUG: '+JSON.stringify(roomList));
     }
 
     var params = url.parse(req.url, true).query,
@@ -151,7 +153,7 @@ function getIn(resp, req){
     if(params.newRoom === '1'){
         room = createRoom(user.getId());
     }else{
-        room = getRoom(params.myRoomId);
+        room = getRoom(+params.myRoomId);
     }
     if(!(room instanceof Room)){
         removeUser(user.getId());
@@ -164,15 +166,22 @@ function getIn(resp, req){
         return ;
     }
     user.setRoomId(room.getId());
+    room.addUser(user.getId());
     resp.writeHead(200,{"Content-Type":"text/plain"});
     resp.write(JSON.stringify({
         status: 0,
         data: {
             roomId: room.getId(),
             userId: user.getId(), // TODO - 用series id替换user id
+            myName: user.getName(),
         }
     }));
     resp.end();
+    if(isDebug){
+        console.log('DEBUG: handler finished.');
+        console.log('DEBUG: '+JSON.stringify(userList));
+        console.log('DEBUG: '+JSON.stringify(roomList));
+    }
     return ;
 }
 
@@ -181,6 +190,8 @@ function send(resp, req){
 
     if(isDebug){
         console.log('DEBUG: '+url.parse(req.url, false).query);
+        console.log('DEBUG: '+JSON.stringify(userList));
+        console.log('DEBUG: '+JSON.stringify(roomList));
     }
 
     var params = url.parse(req.url, true).query,
@@ -194,7 +205,7 @@ function send(resp, req){
         resp.end();
         return ;
     }
-    user = getUser(params.sender);
+    user = getUser(+params.sender);
     if(!user){
         resp.writeHead(200,{"Content-Type":"text/plain"});
         resp.write(JSON.stringify({
@@ -216,10 +227,10 @@ function send(resp, req){
     }
     userLs = room.getUsers();
     for(var i=0; i<userLs.length; i++){
-        if(user === userLs[i]){
+        if(user.getId() === userLs[i]){
             continue;
         }
-        getUser(userLs[i]).pushMessage(new Message(user, content))
+        getUser(userLs[i]).pushMessage(new Message(user.getId(), user.getName(), params.content))
     }
     resp.writeHead(200,{"Content-Type":"text/plain"});
     resp.write(JSON.stringify({
@@ -227,6 +238,11 @@ function send(resp, req){
         data: {}
     }));
     resp.end();
+    if(isDebug){
+        console.log('DEBUG: handler finished.');
+        console.log('DEBUG: '+JSON.stringify(userList));
+        console.log('DEBUG: '+JSON.stringify(roomList));
+    }
     return ;
 }
 
@@ -238,8 +254,8 @@ function check(resp, req){
     }
 
     var params = url.parse(req.url, true).query,
-        user, room, msgLs;
-    user = getUser(params.userId);
+        user, room, msgLs, msgLsObj;
+    user = getUser(+params.userId);
     if(user === null){
         resp.writeHead(200,{"Content-Type":"text/plain"});
         resp.write(JSON.stringify({
@@ -249,7 +265,15 @@ function check(resp, req){
         resp.end();
         return ;
     }
-    msgLs = user.popAllMessage();
+    msgLsObj = user.popAllMessage();
+    msgLs = [];
+    for(var i=0; i<msgLsObj.length; i++){
+        msgLs.push({
+            'senderId': msgLsObj[i].getSenderId(),
+            'senderName': msgLsObj[i].getSenderName(),
+            'content': msgLsObj[i].getContent(),
+        });
+    }
     resp.writeHead(200,{"Content-Type":"text/plain"});
     resp.write(JSON.stringify({
         status: 0,
@@ -266,12 +290,14 @@ function end(resp, req){
 
     if(isDebug){
         console.log('DEBUG: '+url.parse(req.url, false).query);
+        console.log('DEBUG: '+JSON.stringify(userList));
+        console.log('DEBUG: '+JSON.stringify(roomList));
     }
 
     var params = url.parse(req.url, true).query,
         user, room;
-    user = getUser(params.userId);
-    room = getRoom(params.roomId);
+    user = getUser(+params.userId);
+    room = getRoom(+params.roomId);
     if(user === null){
         resp.writeHead(200,{"Content-Type":"text/plain"});
         resp.write(JSON.stringify({
@@ -292,10 +318,16 @@ function end(resp, req){
         data: {}
     }));
     resp.end();
+    if(isDebug){
+        console.log('DEBUG: handler finished.');
+        console.log('DEBUG: '+JSON.stringify(userList));
+        console.log('DEBUG: '+JSON.stringify(roomList));
+    }
     return ;
 }
 
 exports.start = start;
 exports.getIn = getIn;
 exports.send = send;
+exports.check = check;
 exports.end = end;
