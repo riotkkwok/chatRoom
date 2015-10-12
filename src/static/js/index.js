@@ -2,11 +2,13 @@ $(function(){
     var _userId, _roomId, _userName;
 
     var msgHTML = '<li class="msg-item">'
-        + '<div class="user-info">'
-        + '<span>###username###</span>'
-        + '<span>(###userid###)</span>'
+        + '<div class="msg-wrapper">'
+        + '<div class="msg-sender">'
+        + '<span class="name">###username###</span>'
+        + '<span class="uid">(###userid###)</span>'
         + '</div>'
         + '<div class="msg-content">###content###</div>'
+        + '</div>'
         + '</li>';
 
     /* 信息输入框 [start] */

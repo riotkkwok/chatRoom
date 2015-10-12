@@ -1,5 +1,5 @@
 html {font-size: 62.5%}
-html,body,div,ul,li,p,input {padding: 0;margin: 0;border: 0;outline: 0}
+html,body,div,ul,li,p,input,button,textarea {padding: 0;margin: 0;border: 0;outline: 0}
 a {outline: 0;text-decoration: none}
 body {font-size: 10px;font-family: "Helvetica Neue",Helvetica,STHeiTi,sans-serif;margin-top: 0;}
 img,video {vertical-align: bottom}
@@ -8,11 +8,21 @@ ul {list-style-type: none}
     display: none !important;
 }
 .main{
+    color: #666666;
+    font-size: 14px;
     width: 90%;
     max-width: 960px;
     margin: 0 auto;
 }
-.msg-box{}
+.header{
+    height: 32px;
+    background-color: rgba(0,0,0, 0.54);
+}
+.msg-box{
+    min-height: 100px;
+    border: 1px solid #CD9B1D;
+    background-color: #FFFFE0;
+}
 .msg-list{}
 .msg-item{}
 .msg-wrapper{}
@@ -24,6 +34,58 @@ ul {list-style-type: none}
     font-size: 14px;
     width: 100%;
     resize: none;
+}
+.mask{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0, 0.45);
+    z-index: 10;
+}
+.dialog{
+    box-sizing: border-box;
+    font-size: 14px;
+    width: 300px;
+    border-radius: 5px;
+    box-shadow: 0 0 6px 0 #000000;
+    margin: 200px auto 0;
+    padding: 5px;
+    background-color: #ffffff;
+}
+.dialog > p{
+    line-height: 20px;
+    height: 20px;
+    padding: 0 5px;
+}
+.dialog label{
+    display: inline-block;
+    width: 30%;
+}
+.dialog input[type="text"]{
+    font-size: 13px;
+    line-height: 16px;
+    height: 18px;
+    border-bottom: 1px solid rgba(0,0,0, 0.25);
+}
+.dialog input[type="text"]:focus{
+    border-bottom: 1px solid #32CD32;
+}
+.dialog button{
+    display: block;
+    color: #ffffff;
+    line-height: 26px;
+    height: 26px;
+    width: 50%;
+    border-radius: 3px;
+    margin: 10px auto 2px;
+    background-color: #32CD32;
+}
+.dialog button:active{
+    background-color: #228B22;
 }
 #toast{}
 #toast.show-toast{}
