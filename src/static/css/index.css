@@ -15,8 +15,27 @@ ul {list-style-type: none}
     margin: 0 auto;
 }
 .header{
+    color: #ffffff;
     height: 32px;
-    background-color: rgba(0,0,0, 0.54);
+    padding: 0 10px;
+    background-color: #8B7765;
+}
+.header .room-info{
+    display: inline-block;
+    line-height: 32px;
+}
+#leaveBtn{
+    float: right;
+}
+.act-btn2{
+    display: inline-block;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 26px;
+    border-radius: 2px;
+    margin: 3px 0;
+    padding: 0 5px;
+    background-color: #999999;
 }
 .msg-box{
     min-height: 100px;
@@ -87,5 +106,41 @@ ul {list-style-type: none}
 .dialog button:active{
     background-color: #228B22;
 }
-#toast{}
-#toast.show-toast{}
+#toast{
+    position: fixed;
+    bottom: 20%;
+    display: none;
+    text-align: center;
+    width: 100%;
+    z-index: 5;
+}
+#toast.show-toast{
+    display: block;
+    opacity: 1;
+    animation: toastAnim 3s 1 forwards linear;
+    -webkit-animation: toastAnim 3s 1 forwards linear;
+}
+#toast > p{
+    display: inline-block;
+    color: #ffffff;
+    line-height: 20px;
+    height: 20px;
+    min-width: 80px;
+    border-radius: 3px;
+    box-shadow: 0 0 3px 0 #000000;
+    padding: 2px 10px;
+    background-color: rgba(0,0,0, 0.54);
+}
+
+@-keyframes toastAnim{
+    0% {opacity: 0;}
+    20% {opacity: 1;}
+    80% {opacity: 1;}
+    100% {opacity: 0;}
+}
+@-webkit-keyframes toastAnim{
+    0% {opacity: 0;}
+    20% {opacity: 1;}
+    80% {opacity: 1;}
+    100% {opacity: 0;}
+}

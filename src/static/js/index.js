@@ -107,16 +107,16 @@ $(function(){
         _userName = data.myName;
         $('#selectRoom').addClass('hidden');
         $('#roomId').text(data.roomId);
-        $('.room-info, #leaveBtn').removeClass('hidden');
+        $('#leaveBtn').removeClass('hidden');
         setInterval(checkMsg, 5000);
     }
 
     function toast(str){
         // TODO - 添加Deferred
         console.log('toast: '+str);
-        $('#toast').text(str).addClass('show-toast');
+        $('#toast').addClass('show-toast').children('p').text(str);
         setTimeout(function(){
-            $('#toast').text('').removeClass('show-toast');
+            $('#toast').removeClass('show-toast').children('p').text('');
         }, 3000);
     }
 
