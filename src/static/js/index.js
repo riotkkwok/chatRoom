@@ -1,11 +1,11 @@
 $(function(){
     var _userId, _roomId, _userName;
 
-    var msgHTML = '<li class="msg-item">'
+    var msgHTML = '<li class="msg-item ###me###">'
         + '<div class="msg-wrapper">'
         + '<div class="msg-sender">'
-        + '<span class="name">###username###</span>'
-        + '<span class="uid">(###userid###)</span>'
+        + '<span>###username###</span>'
+        + '<span>(###userid###)</span>'
         + '</div>'
         + '<div class="msg-content">###content###</div>'
         + '</div>'
@@ -30,11 +30,16 @@ $(function(){
             },
             dataType: 'json',
             success: function(rs){
-                $('#newRoom').removeAttr('checked');
-                $('#myRoomId').val('');
-                $('#myName').val('');
-                init(rs.data);
-                // TODO
+                if(rs.data && rs.status === 0){
+                    $('#newRoom').removeAttr('checked');
+                    $('#myRoomId').val('');
+                    $('#myName').val('');
+                    init(rs.data);
+                }else{
+                    $('#myRoomId').val('');
+                    $('#myName').val('');
+                    toast(rs.errorMsg || '发送失败，请重试！');
+                }
             },
             error: function(){
                 $('#selectRoom').addClass('hidden');
@@ -85,6 +90,7 @@ $(function(){
                 if(rs.data && rs.status === 0){
                     $('#myMsg').val('').removeAttr('readonly').removeClass('freeze');
                     $('#msgList').append(msgHTML
+                        .replace('###me###', 'me')
                         .replace('###username###', _userName)
                         .replace('###userid###', _userId)
                         .replace('###content###', content));
@@ -131,6 +137,7 @@ $(function(){
                 if(rs.data && rs.data.messages){
                     for(var i=0; i<rs.data.messages.length; i++){
                         $('#msgList').append(msgHTML
+                            .replace('###me###', '')
                             .replace('###username###', rs.data.messages[i].senderName)
                             .replace('###userid###', rs.data.messages[i].senderId)
                             .replace('###content###', rs.data.messages[i].content));

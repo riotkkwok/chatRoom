@@ -42,17 +42,61 @@ ul {list-style-type: none}
     border: 1px solid #CD9B1D;
     background-color: #FFFFE0;
 }
-.msg-list{}
-.msg-item{}
-.msg-wrapper{}
-.msg-sender{}
-.msg-content{}
-.my-box{}
-.info-input{}
-.text-box{
+.msg-list{
+    padding: 5px;
+}
+.msg-item{
+    padding: 5px 0;
+}
+.msg-item.me{
+    text-align: right;
+}
+.msg-wrapper{
+    display: inline-block;
+}
+.msg-sender{
+    color: #666666;
+    font-size: 12px;
+    line-height: 20px;
+}
+.msg-content{
+    color: #000000;
     font-size: 14px;
+    line-height: 18px;
+    border-radius: 3px;
+    box-shadow: 0 0 1px 0 #aaaaaa;
+    padding: 2px 5px;
+    background-color: #87CEFA;
+}
+.my-box{
+    padding: 20px 0;
+}
+.text-box{
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 18px;
     width: 100%;
     resize: none;
+    border: 1px solid #aaaaaa;
+    border-radius: 5px;
+    box-shadow: inset 0 0 3px 0 #aaaaaa;
+    padding: 5px 8px;
+}
+.text-box:focus{
+    box-shadow: inset 0 0 3px 0 #00BFFF;
+}
+.act-btn{
+    display: block;
+    color: #ffffff;
+    line-height: 26px;
+    height: 26px;
+    width: 50%;
+    border-radius: 3px;
+    margin: 10px auto 2px;
+    background-color: #32CD32;
+}
+.act-btn:active{
+    background-color: #228B22;
 }
 .mask{
     position: absolute;
@@ -63,7 +107,7 @@ ul {list-style-type: none}
     height: 100%;
     width: 100%;
     background-color: rgba(0,0,0, 0.45);
-    z-index: 10;
+    z-index: 5;
 }
 .dialog{
     box-sizing: border-box;
@@ -84,35 +128,23 @@ ul {list-style-type: none}
     display: inline-block;
     width: 30%;
 }
-.dialog input[type="text"]{
+.dialog .info-input[type="text"]{
     font-size: 13px;
     line-height: 16px;
     height: 18px;
     border-bottom: 1px solid rgba(0,0,0, 0.25);
 }
-.dialog input[type="text"]:focus{
+.dialog .info-input[type="text"]:focus{
     border-bottom: 1px solid #32CD32;
-}
-.dialog button{
-    display: block;
-    color: #ffffff;
-    line-height: 26px;
-    height: 26px;
-    width: 50%;
-    border-radius: 3px;
-    margin: 10px auto 2px;
-    background-color: #32CD32;
-}
-.dialog button:active{
-    background-color: #228B22;
 }
 #toast{
     position: fixed;
+    left: 0;
     bottom: 20%;
     display: none;
     text-align: center;
     width: 100%;
-    z-index: 5;
+    z-index: 10;
 }
 #toast.show-toast{
     display: block;
