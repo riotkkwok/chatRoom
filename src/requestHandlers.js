@@ -247,11 +247,7 @@ function send(resp, req){
 }
 
 function check(resp, req){
-    console.log("Request handler 'check' was called.");
-
-    if(isDebug){
-        console.log('DEBUG: '+url.parse(req.url, false).query);
-    }
+    // console.log("Request handler 'check' was called.");
 
     var params = url.parse(req.url, true).query,
         user, room, msgLs, msgLsObj;
@@ -282,6 +278,11 @@ function check(resp, req){
         }
     }));
     resp.end();
+
+    if(isDebug && msgLs.length>0){
+        console.log('DEBUG: '+JSON.stringify(msgLs));
+    }
+
     return ;
 }
 
