@@ -114,6 +114,7 @@ $(function(){
         $('#selectRoom').addClass('hidden');
         $('#roomId').text(data.roomId);
         $('#leaveBtn').removeClass('hidden');
+        $('#username').text(_userName+'('+_userId+')');
         setInterval(checkMsg, 5000);
     }
 

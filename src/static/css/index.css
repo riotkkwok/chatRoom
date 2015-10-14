@@ -22,7 +22,11 @@ ul {list-style-type: none}
 }
 .header .room-info{
     display: inline-block;
+    font-weight: bold;
     line-height: 32px;
+}
+#username{
+    color: #87CEFA;
 }
 #leaveBtn{
     float: right;
@@ -60,6 +64,7 @@ ul {list-style-type: none}
     line-height: 20px;
 }
 .msg-content{
+    display: inline-block;
     color: #000000;
     font-size: 14px;
     line-height: 18px;
@@ -133,6 +138,7 @@ ul {list-style-type: none}
     line-height: 16px;
     height: 18px;
     border-bottom: 1px solid rgba(0,0,0, 0.25);
+    border-radius: 0;
 }
 .dialog .info-input[type="text"]:focus{
     border-bottom: 1px solid #32CD32;
