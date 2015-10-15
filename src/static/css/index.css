@@ -61,17 +61,42 @@ ul {list-style-type: none}
 .msg-sender{
     color: #666666;
     font-size: 12px;
+    text-indent: 6px;
     line-height: 20px;
 }
 .msg-content{
+    position: relative;
     display: inline-block;
     color: #000000;
     font-size: 14px;
+    word-break: break-all;
+    white-space: normal;
     line-height: 18px;
     border-radius: 3px;
     box-shadow: 0 0 1px 0 #aaaaaa;
+    margin: 0 6px;
     padding: 2px 5px;
     background-color: #87CEFA;
+}
+.msg-content:before{
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    font-size: 0;
+    line-height: 0;
+    border-color: transparent #87CEFA transparent transparent;
+    border-style: dashed solid dashed dashed;
+    border-width: 6px;
+    position: absolute;
+    top: 5px;
+    left: -12px;
+    content: " ";
+}
+.msg-item.me .msg-content:before{
+    border-color: transparent transparent transparent #87CEFA;
+    border-style: dashed dashed dashed solid;
+    left: auto;
+    right: -12px;
 }
 .my-box{
     padding: 20px 0;
