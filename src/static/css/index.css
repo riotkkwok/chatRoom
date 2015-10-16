@@ -55,6 +55,10 @@ ul {list-style-type: none}
 .msg-item.me{
     text-align: right;
 }
+.msg-item.sys{
+    text-align: center;
+    padding-bottom: 0;
+}
 .msg-wrapper{
     display: inline-block;
 }
@@ -77,6 +81,24 @@ ul {list-style-type: none}
     margin: 0 6px;
     padding: 2px 5px;
     background-color: #87CEFA;
+}
+.msg-content.sys{
+    position: static;
+    display: inline-block;
+    color: #aaaaaa;
+    font-size: 12px;
+    word-break: break-all;
+    white-space: normal;
+    line-height: 18px;
+    border-radius: none;
+    box-shadow: none;
+    margin: 0 6px;
+    padding: 2px 5px;
+    background-color: transparent;
+}
+.msg-content.sys:before{
+    position: static;
+    display: none;
 }
 .msg-content:before{
     width: 0;

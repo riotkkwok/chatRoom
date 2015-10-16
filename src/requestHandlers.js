@@ -118,6 +118,20 @@ function removeRoom(id){
     return done;
 }
 
+function sendSysMsg(userLs, type, name, id){
+    var msgObj = {
+        userIn: '###username###(###userid###) is in the chat room now.',
+        userOut: '###username###(###userid###) just leaved the chat room.'
+    },
+    msg = msgObj[type].replace('###username###', name).replace('###userid###', id);
+    for(var i=0; i<userLs.length; i++){
+        if(id === userLs[i]){
+            continue;
+        }
+        getUser(userLs[i]).pushMessage(new Message(null, null, msg, true));
+    }
+}
+
 function start(resp){
     console.log("Request handler 'start' was called.");
 
@@ -167,6 +181,7 @@ function getIn(resp, req){
     }
     user.setRoomId(room.getId());
     room.addUser(user.getId());
+    sendSysMsg(room.getUsers(), 'userIn', user.getName(), user.getId());
     resp.writeHead(200,{"Content-Type":"text/plain"});
     resp.write(JSON.stringify({
         status: 0,
@@ -268,6 +283,7 @@ function check(resp, req){
             'senderId': msgLsObj[i].getSenderId(),
             'senderName': msgLsObj[i].getSenderName(),
             'content': msgLsObj[i].getContent(),
+            'isSys': msgLsObj[i].getIsSys(),
         });
     }
     resp.writeHead(200,{"Content-Type":"text/plain"});
@@ -309,10 +325,12 @@ function end(resp, req){
         return ;
     }
     room.removeUser(user.getId());
+    removeUser(user.getId());
     if(room.getUsers().length === 0){
         removeRoom(room.getId());
+    }else{
+        sendSysMsg(room.getUsers(), 'userOut', user.getName(), user.getId());
     }
-    removeUser(user.getId());
     resp.writeHead(200,{"Content-Type":"text/plain"});
     resp.write(JSON.stringify({
         status: 0,

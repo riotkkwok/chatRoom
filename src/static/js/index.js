@@ -1,5 +1,5 @@
 $(function(){
-    var _userId, _roomId, _userName;
+    var _userId, _roomId, _userName, _checkTS, _errCount = 0;
 
     var msgHTML = '<li class="msg-item ###me###">'
         + '<div class="msg-wrapper">'
@@ -7,6 +7,16 @@ $(function(){
         + '<span>###username###</span>'
         + '<span>(###userid###)</span>'
         + '</div>'
+        + '<div class="msg-content">###content###</div>'
+        + '</div>'
+        + '</li>',
+    msgHTML2 = '<li class="msg-item sys">'
+        + '<div class="msg-wrapper">'
+        + '<div class="msg-content sys">###content###</div>'
+        + '</div>'
+        + '</li>',
+    sysMsgHTML = '<li class="msg-item sys">'
+        + '<div class="msg-wrapper">'
         + '<div class="msg-content">###content###</div>'
         + '</div>'
         + '</li>';
@@ -115,7 +125,7 @@ $(function(){
         $('#roomId').text(data.roomId);
         $('#leaveBtn').removeClass('hidden');
         $('#username').text(_userName+'('+_userId+')');
-        setInterval(checkMsg, 5000);
+        _checkTS = setInterval(checkMsg, 5000);
     }
 
     function toast(str){
@@ -128,6 +138,15 @@ $(function(){
     }
 
     function checkMsg(){
+        if(_errCount >= 12){
+            clearInterval(_checkTS);
+            $('#confirmBtn').one('click', function(){
+                window.reload();
+                $('#prompt').addClass('hidden');
+            });
+            $('#promptMsg').text('You\'re disconnented with the server, please re-enter.');
+            $('#prompt').removeClass('hidden');
+        }
         $.ajax({
             url: '/check',
             data: {
@@ -136,16 +155,26 @@ $(function(){
             dataType: 'json',
             success: function(rs){
                 if(rs.data && rs.data.messages){
+                    if(rs.status === 0){
+                        _errCount = 0;
+                    }
                     for(var i=0; i<rs.data.messages.length; i++){
-                        $('#msgList').append(msgHTML
-                            .replace('###me###', '')
-                            .replace('###username###', rs.data.messages[i].senderName)
-                            .replace('###userid###', rs.data.messages[i].senderId)
-                            .replace('###content###', rs.data.messages[i].content));
+                        if(rs.data.messages[i].isSys){
+                            $('#msgList').append(msgHTML2
+                                .replace('###content###', rs.data.messages[i].content));
+                        }else{
+                            $('#msgList').append(msgHTML
+                                .replace('###me###', '')
+                                .replace('###username###', rs.data.messages[i].senderName||'')
+                                .replace('###userid###', rs.data.messages[i].senderId||'')
+                                .replace('###content###', rs.data.messages[i].content));
+                        }
                     }
                 }
             },
-            error: function(){}
+            error: function(){
+                _errCount++;
+            }
         })
     }
 });

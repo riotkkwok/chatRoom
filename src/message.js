@@ -1,7 +1,8 @@
-function Message(senderId, senderName, content){
+function Message(senderId, senderName, content, isSys){
     this.senderId = senderId;
     this.senderName = senderName;
     this.content = content;
+    this.isSys = !!isSys;
 }
 
 Message.prototype.getSenderId = function() {
@@ -14,6 +15,10 @@ Message.prototype.getSenderName = function() {
 
 Message.prototype.getContent = function() {
     return this.content;
+};
+
+Message.prototype.getIsSys = function() {
+    return this.isSys;
 };
 
 exports.Message = Message;
