@@ -173,7 +173,6 @@ ul {list-style-type: none}
 }
 .dialog > p{
     line-height: 20px;
-    height: 20px;
     padding: 0 5px;
 }
 .dialog label{
