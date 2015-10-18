@@ -132,8 +132,13 @@ function sendSysMsg(userLs, type, name, id){
     }
 }
 
+function logDatetime(){
+    var d = new Date();
+    console.log(d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+':'+d.getMilliseconds());
+}
+
 function start(resp){
-    console.log("Request handler 'start' was called.");
+    console.log(logDatetime() + " - Request handler 'start' was called.");
 
     fs.readFile('./view/home.html', 'utf-8', function (err, data) {//读取内容
         if(err) throw err;
@@ -144,7 +149,7 @@ function start(resp){
 }
 
 function getIn(resp, req){
-    console.log("Request handler 'getIn' was called.");
+    console.log(logDatetime() + " - Request handler 'getIn' was called.");
 
     if(isDebug){
         console.log('DEBUG: '+url.parse(req.url, false).query);
@@ -193,15 +198,15 @@ function getIn(resp, req){
     }));
     resp.end();
     if(isDebug){
-        console.log('DEBUG: handler finished.');
         console.log('DEBUG: '+JSON.stringify(userList));
         console.log('DEBUG: '+JSON.stringify(roomList));
+        console.log('DEBUG: handler finished.');
     }
     return ;
 }
 
 function send(resp, req){
-    console.log("Request handler 'send' was called.");
+    console.log(logDatetime() + " - Request handler 'send' was called.");
 
     if(isDebug){
         console.log('DEBUG: '+url.parse(req.url, false).query);
@@ -254,9 +259,9 @@ function send(resp, req){
     }));
     resp.end();
     if(isDebug){
+        console.log('DEBUG: userList '+JSON.stringify(userList));
+        console.log('DEBUG: roomList '+JSON.stringify(roomList));
         console.log('DEBUG: handler finished.');
-        console.log('DEBUG: '+JSON.stringify(userList));
-        console.log('DEBUG: '+JSON.stringify(roomList));
     }
     return ;
 }
@@ -296,14 +301,14 @@ function check(resp, req){
     resp.end();
 
     if(isDebug && msgLs.length>0){
-        console.log('DEBUG: '+JSON.stringify(msgLs));
+        console.log('DEBUG: check - '+JSON.stringify(msgLs));
     }
 
     return ;
 }
 
 function end(resp, req){
-    console.log("Request handler 'end' was called.");
+    console.log(logDatetime() + " - Request handler 'end' was called.");
 
     if(isDebug){
         console.log('DEBUG: '+url.parse(req.url, false).query);
@@ -338,9 +343,9 @@ function end(resp, req){
     }));
     resp.end();
     if(isDebug){
-        console.log('DEBUG: handler finished.');
         console.log('DEBUG: '+JSON.stringify(userList));
         console.log('DEBUG: '+JSON.stringify(roomList));
+        console.log('DEBUG: handler finished.');
     }
     return ;
 }
