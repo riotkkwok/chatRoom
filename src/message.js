@@ -1,24 +1,24 @@
-function Message(senderId, senderName, content, isSys){
-    this.senderId = senderId;
-    this.senderName = senderName;
-    this.content = content;
-    this.isSys = !!isSys;
+function Message(sdrId, sdrName, ctt, sys){
+    var senderId = sdrId,
+    senderName = sdrName,
+    content = ctt,
+    isSys = !!sys;
+
+    this.getSenderId = function() {
+        return senderId;
+    };
+
+    this.getSenderName = function() {
+        return senderName;
+    };
+
+    this.getContent = function() {
+        return content;
+    };
+
+    this.getIsSys = function() {
+        return isSys;
+    };
 }
-
-Message.prototype.getSenderId = function() {
-    return this.senderId;
-};
-
-Message.prototype.getSenderName = function() {
-    return this.senderName;
-};
-
-Message.prototype.getContent = function() {
-    return this.content;
-};
-
-Message.prototype.getIsSys = function() {
-    return this.isSys;
-};
 
 exports.Message = Message;
