@@ -141,7 +141,7 @@ $(function(){
         if(_errCount >= 12){
             clearInterval(_checkTS);
             $('#confirmBtn').one('click', function(){
-                window.reload();
+                location.reload();
                 $('#prompt').addClass('hidden');
             });
             $('#promptMsg').text('You\'re disconnented with the server, please re-enter.');
