@@ -23,7 +23,7 @@ function createUser(name, roomId){
         return 0;
     }else{
         for(var i=0; i<userList.length; i++){
-            if(i + 1 < userList[i].id){
+            if(i + 1 < userList[i].getId()){
                 newItem.setId(i+1);
                 tmp = userList.splice(i);
                 userList = userList.concat(newItem).concat(tmp);
@@ -50,7 +50,7 @@ function createRoom(userId){
         return 0;
     }else{
         for(var i=0; i<roomList.length; i++){
-            if(i + 1 < roomList[i].id){
+            if(i + 1 < roomList[i].getId()){
                 newItem.setId(i+1);
                 tmp = roomList.splice(i);
                 roomList = roomList.concat(newItem).concat(tmp);
@@ -68,7 +68,7 @@ function createRoom(userId){
 
 function getUser(id){
     for(var i=0; i<userList.length; i++){
-        if(userList[i].id === id){
+        if(userList[i].getId() === id){
             return userList[i];
         }
     }
@@ -78,7 +78,7 @@ function getUser(id){
 function removeUser(id){
     var done = false;
     for(var i=0; i<userList.length; i++){
-        if(id === userList[i].id){
+        if(id === userList[i].getId()){
             done = true;
         }
         if(done){
@@ -94,7 +94,7 @@ function removeUser(id){
 
 function getRoom(id){
     for(var i=0; i<roomList.length; i++){
-        if(roomList[i].id === id){
+        if(roomList[i].getId() === id){
             return roomList[i];
         }
     }
@@ -104,7 +104,7 @@ function getRoom(id){
 function removeRoom(id){
     var done = false;
     for(var i=0; i<roomList.length; i++){
-        if(id === roomList[i].id){
+        if(id === roomList[i].getId()){
             done = true;
         }
         if(done){
