@@ -1,55 +1,55 @@
 var MAX_SIZE = 5;
 
-function Room(id, userLs){
-    this.id = id || null;
-    this.users = userLs || [];
-}
+function Room(i, ul){
+    id = i || null;
+    users = ul || [];
 
-Room.prototype.getId = function() {
-    return this.id;
-};
+    this.getId = function() {
+        return id;
+    };
 
-Room.prototype.setId = function(id) {
-    this.id = id;
-};
+    this.setId = function(i) {
+        id = i;
+    };
 
-Room.prototype.getUsers = function() {
-    return this.users;
-};
+    this.getUsers = function() {
+        return users;
+    };
 
-Room.prototype.addUser = function(userId) {
-    var tmp;
-    if(this.users.length + 1 >= MAX_SIZE){
-        return 0;
-    }
-    for(var i=0; i<this.users.length; i++){
-        if(this.users[i] === userId){
+    this.addUser = function(ui) {
+        var tmp;
+        if(users.length + 1 >= MAX_SIZE){
             return 0;
         }
-        if(this.users[i] > userId){
-            tmp = this.users.splice(i);
-            this.users = this.users.concat(userId).concat(tmp);
-            return 1;
+        for(var i=0; i<users.length; i++){
+            if(users[i] === ui){
+                return 0;
+            }
+            if(users[i] > ui){
+                tmp = users.splice(i);
+                users = users.concat(ui).concat(tmp);
+                return 1;
+            }
         }
-    }
-    this.users.push(userId);
-    return 1;
-};
+        users.push(ui);
+        return 1;
+    };
 
-Room.prototype.removeUser = function(userId) {
-    var r = 0;
-    for(var i=0; i<this.users.length; i++){
-        if(this.users[i] === userId){
-            r = 1;
+    this.removeUser = function(ui) {
+        var r = 0;
+        for(var i=0; i<users.length; i++){
+            if(users[i] === ui){
+                r = 1;
+            }
+            if(r === 1){
+                users[i] = users[i+1];
+            }
         }
         if(r === 1){
-            this.users[i] = this.users[i+1];
+            --users.length;
         }
-    }
-    if(r === 1){
-        --this.users.length;
-    }
-    return r;
-};
+        return r;
+    };
+}
 
 exports.Room = Room;

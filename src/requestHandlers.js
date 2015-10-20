@@ -134,7 +134,7 @@ function sendSysMsg(userLs, type, name, id){
 
 function logDatetime(){
     var d = new Date();
-    console.log(d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+':'+d.getMilliseconds());
+    return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+':'+d.getMilliseconds();
 }
 
 function start(resp){
