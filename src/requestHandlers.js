@@ -12,6 +12,14 @@ var userList = [],
 
 var isDebug = true; // default is false
 
+/* ajax response status [start]
+ *
+ * 0 - normal
+ * 1 - common error
+ * 2 - error needs to re-login
+ *
+ * ajax response status [start] */
+
 function createUser(name, roomId){
     var newItem, tmp;
     newItem = new User(name, null, roomId);
@@ -137,12 +145,38 @@ function logDatetime(){
     return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+':'+d.getMilliseconds();
 }
 
+function checkSsid(resp, cookie){
+    var ssid, cks;
+
+    if(cookie){
+        cks = cookie.split(';');
+        for(var i=0; i<cks.length; i++){
+            if(cks[i].indexOf('ssid=')===0){
+                ssid = cks[i].replace('ssid=', '');
+                break;
+            }
+        }
+    }
+
+    if(ssid === global.chatroom.setupstamp){
+        return true;
+    }else{
+        resp.writeHead(200,{"Content-Type":"text/plain"});
+        resp.write(JSON.stringify({
+            status: 2,
+            errorMsg: errorMsg.loginTimeout
+        }));
+        resp.end();
+        return false;
+    }
+}
+
 function start(resp){
     console.log(logDatetime() + " - Request handler 'start' was called.");
 
     fs.readFile('./view/home.html', 'utf-8', function (err, data) {//读取内容
         if(err) throw err;
-        resp.writeHead(200, {"Content-Type": "text/html"});//注意这里
+        resp.writeHead(200, {"Content-Type": "text/html", "Set-Cookie": "ssid="+global.chatroom.setupstamp});//注意这里
         resp.write(data);
         resp.end();
     });
@@ -155,6 +189,10 @@ function getIn(resp, req){
         console.log('DEBUG: '+url.parse(req.url, false).query);
         console.log('DEBUG: '+JSON.stringify(userList));
         console.log('DEBUG: '+JSON.stringify(roomList));
+    }
+
+    if(!checkSsid(resp, req.headers.cookie)){
+        return ;
     }
 
     var params = url.parse(req.url, true).query,
@@ -214,6 +252,10 @@ function send(resp, req){
         console.log('DEBUG: '+JSON.stringify(roomList));
     }
 
+    if(!checkSsid(resp, req.headers.cookie)){
+        return ;
+    }
+
     var params = url.parse(req.url, true).query,
         user, room, userLs;
     if(!params.sender || !params.content){
@@ -269,13 +311,17 @@ function send(resp, req){
 function check(resp, req){
     // console.log("Request handler 'check' was called.");
 
+    if(!checkSsid(resp, req.headers.cookie)){
+        return ;
+    }
+
     var params = url.parse(req.url, true).query,
         user, room, msgLs, msgLsObj;
     user = getUser(+params.userId);
     if(user === null){
         resp.writeHead(200,{"Content-Type":"text/plain"});
         resp.write(JSON.stringify({
-            status: 1,
+            status: 2,
             errorMsg: errorMsg.userNotFound
         }));
         resp.end();
@@ -316,6 +362,10 @@ function end(resp, req){
         console.log('DEBUG: '+JSON.stringify(roomList));
     }
 
+    if(!checkSsid(resp, req.headers.cookie)){
+        return ;
+    }
+
     var params = url.parse(req.url, true).query,
         user, room;
     user = getUser(+params.userId);
@@ -323,7 +373,7 @@ function end(resp, req){
     if(user === null){
         resp.writeHead(200,{"Content-Type":"text/plain"});
         resp.write(JSON.stringify({
-            status: 1,
+            status: 2,
             errorMsg: errorMsg.userNotFound
         }));
         resp.end();

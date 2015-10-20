@@ -5,6 +5,7 @@ var errorMsg = {
     'createUserFailed': 'Fail to create user.',
     'createRoomFailed': 'Fail to create room.',
     'userNotFound': 'User is not found, please re-login.',
+    'loginTimeout': 'The session is timeout, please re-login.',
 };
 
 exports.errorMsg = errorMsg;
