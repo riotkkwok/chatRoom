@@ -151,6 +151,7 @@ function checkSsid(resp, cookie){
     if(cookie){
         cks = cookie.split(';');
         for(var i=0; i<cks.length; i++){
+            cks[i] = cks[i].trim();
             if(cks[i].indexOf('ssid=')===0){
                 ssid = cks[i].replace('ssid=', '');
                 break;

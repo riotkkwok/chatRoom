@@ -15,6 +15,7 @@ function start(route, handle){
     global.chatroom = {
         setupstamp: sha1.digest('hex')
     };
+    // console.log(global.chatroom.setupstamp);
 }
 
 exports.start = start;
