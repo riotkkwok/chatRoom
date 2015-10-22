@@ -1,5 +1,5 @@
 $(function(){
-    var _userId, _roomId, _userName, _checkTS, _errCount = 0;
+    var _userId, _userSid, _roomId, _userName, _checkTS, _errCount = 0;
 
     var msgHTML = '<li class="msg-item ###me###">'
         + '<div class="msg-wrapper">'
@@ -64,7 +64,7 @@ $(function(){
         $.ajax({
             url: '/end',
             data: {
-                'userId': _userId,
+                'userSid': _userSid,
                 'roomId': _roomId,
             },
             dataType: 'json',
@@ -92,7 +92,7 @@ $(function(){
         $.ajax({
             url: '/send',
             data: {
-                'sender': _userId,
+                'sender': _userSid,
                 'content': $('#myMsg').val(),
             },
             dataType: 'json',
@@ -119,6 +119,7 @@ $(function(){
 
     function init(data){
         _userId = data.userId;
+        _userSid = data.userSid;
         _roomId = data.roomId;
         _userName = data.myName;
         $('#selectRoom').addClass('hidden');
@@ -150,7 +151,7 @@ $(function(){
         $.ajax({
             url: '/check',
             data: {
-                'userId': _userId,
+                'userSid': _userSid,
             },
             dataType: 'json',
             success: function(rs){

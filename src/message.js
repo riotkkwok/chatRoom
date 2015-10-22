@@ -1,8 +1,9 @@
-function Message(sdrId, sdrName, ctt, sys){
+function Message(sdrId, sdrName, ctt, sys, sdrSid){
     var senderId = sdrId,
     senderName = sdrName,
     content = ctt,
-    isSys = !!sys;
+    isSys = !!sys,
+    senderSid = sdrSid;
 
     this.getSenderId = function() {
         return senderId;
@@ -18,6 +19,10 @@ function Message(sdrId, sdrName, ctt, sys){
 
     this.getIsSys = function() {
         return isSys;
+    };
+
+    this.getSenderSid = function() {
+        return senderSid;
     };
 }
 

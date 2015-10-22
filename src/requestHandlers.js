@@ -1,5 +1,6 @@
 var url = require("url"),
     fs = require("fs"),
+    crypto = require("crypto"),
     User = require("./user").User,
     Room = require("./room").Room,
     Message = require("./message").Message,
@@ -31,7 +32,7 @@ function createUser(name, roomId){
         return 0;
     }else{
         for(var i=0; i<userList.length; i++){
-            if(i + 1 < userList[i].getId()){
+            if(i + 1 < userList[i].getSid()){
                 newItem.setId(i+1);
                 tmp = userList.splice(i);
                 userList = userList.concat(newItem).concat(tmp);
@@ -44,6 +45,8 @@ function createUser(name, roomId){
             }
         }
     }
+    newItem.setSid(generateSid4User(newItem));
+    console.log(newItem.getSid());
     return newItem;
 }
 
@@ -74,9 +77,9 @@ function createRoom(userId){
     return newItem;
 }
 
-function getUser(id){
+function getUser(sid){
     for(var i=0; i<userList.length; i++){
-        if(userList[i].getId() === id){
+        if(userList[i].getSid() === sid){
             return userList[i];
         }
     }
@@ -86,7 +89,7 @@ function getUser(id){
 function removeUser(id){
     var done = false;
     for(var i=0; i<userList.length; i++){
-        if(id === userList[i].getId()){
+        if(id === userList[i].getSid()){
             done = true;
         }
         if(done){
@@ -126,14 +129,15 @@ function removeRoom(id){
     return done;
 }
 
-function sendSysMsg(userLs, type, name, id){
+function sendSysMsg(userLs, type, sender){
     var msgObj = {
         userIn: '###username###(###userid###) is in the chat room now.',
         userOut: '###username###(###userid###) just leaved the chat room.'
     },
-    msg = msgObj[type].replace('###username###', name).replace('###userid###', id);
+    sid = sender.getSid();
+    msg = msgObj[type].replace('###username###', sender.getName()).replace('###userid###', sender.getId());
     for(var i=0; i<userLs.length; i++){
-        if(id === userLs[i]){
+        if(sid === userLs[i]){
             continue;
         }
         getUser(userLs[i]).pushMessage(new Message(null, null, msg, true));
@@ -170,6 +174,19 @@ function checkSsid(resp, cookie){
         resp.end();
         return false;
     }
+}
+
+function generateSid4User(user){
+    if(!user || !user.getId()){
+        return null;
+    }
+    var sha1 = crypto.createHash('sha1');
+    sha1.update('userSeriesId');
+    sha1.update(+new Date()+'');
+    sha1.update(user.getId()+'');
+    sha1.update(user.getName());
+    sha1.update((Math.random()*10000).toString().substring(0,4));
+    return sha1.digest('hex');
 }
 
 function start(resp){
@@ -209,12 +226,12 @@ function getIn(resp, req){
         return ;
     }
     if(params.newRoom === '1'){
-        room = createRoom(user.getId());
+        room = createRoom(user.getSid());
     }else{
         room = getRoom(+params.myRoomId);
     }
     if(!(room instanceof Room)){
-        removeUser(user.getId());
+        removeUser(user.getSid());
         resp.writeHead(200,{"Content-Type":"text/plain"});
         resp.write(JSON.stringify({
             status: 1,
@@ -224,14 +241,15 @@ function getIn(resp, req){
         return ;
     }
     user.setRoomId(room.getId());
-    room.addUser(user.getId());
-    sendSysMsg(room.getUsers(), 'userIn', user.getName(), user.getId());
+    room.addUser(user.getSid());
+    sendSysMsg(room.getUsers(), 'userIn', user);
     resp.writeHead(200,{"Content-Type":"text/plain"});
     resp.write(JSON.stringify({
         status: 0,
         data: {
             roomId: room.getId(),
-            userId: user.getId(), // TODO - 用series id替换user id
+            userId: user.getId(),
+            userSid: user.getSid(),
             myName: user.getName(),
         }
     }));
@@ -268,7 +286,7 @@ function send(resp, req){
         resp.end();
         return ;
     }
-    user = getUser(+params.sender);
+    user = getUser(params.sender);
     if(!user){
         resp.writeHead(200,{"Content-Type":"text/plain"});
         resp.write(JSON.stringify({
@@ -290,10 +308,10 @@ function send(resp, req){
     }
     userLs = room.getUsers();
     for(var i=0; i<userLs.length; i++){
-        if(user.getId() === userLs[i]){
+        if(user.getSid() === userLs[i]){
             continue;
         }
-        getUser(userLs[i]).pushMessage(new Message(user.getId(), user.getName(), params.content))
+        getUser(userLs[i]).pushMessage(new Message(user.getId(), user.getName(), params.content, false, user.getSid()))
     }
     resp.writeHead(200,{"Content-Type":"text/plain"});
     resp.write(JSON.stringify({
@@ -318,7 +336,7 @@ function check(resp, req){
 
     var params = url.parse(req.url, true).query,
         user, room, msgLs, msgLsObj;
-    user = getUser(+params.userId);
+    user = getUser(params.userSid);
     if(user === null){
         resp.writeHead(200,{"Content-Type":"text/plain"});
         resp.write(JSON.stringify({
@@ -369,7 +387,7 @@ function end(resp, req){
 
     var params = url.parse(req.url, true).query,
         user, room;
-    user = getUser(+params.userId);
+    user = getUser(params.userSid);
     room = getRoom(+params.roomId);
     if(user === null){
         resp.writeHead(200,{"Content-Type":"text/plain"});
@@ -380,12 +398,12 @@ function end(resp, req){
         resp.end();
         return ;
     }
-    room.removeUser(user.getId());
-    removeUser(user.getId());
+    room.removeUser(user.getSid());
+    removeUser(user.getSid());
     if(room.getUsers().length === 0){
         removeRoom(room.getId());
     }else{
-        sendSysMsg(room.getUsers(), 'userOut', user.getName(), user.getId());
+        sendSysMsg(room.getUsers(), 'userOut', user);
     }
     resp.writeHead(200,{"Content-Type":"text/plain"});
     resp.write(JSON.stringify({

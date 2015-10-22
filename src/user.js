@@ -1,8 +1,9 @@
-function User(n, i, ri){
+function User(n, i, ri, si){
     var name = n || 'anonymous',
     id = i || null,
     roomId = ri || null,
-    messages = [];
+    messages = [],
+    sid = si;
 
     this.getName = function() {
         return name;
@@ -26,15 +27,21 @@ function User(n, i, ri){
 
     this.pushMessage = function(msg){
         messages.push(msg);
-    }
+    };
 
     this.popAllMessage = function(){
         var result = messages;
         messages = [];
         return result;
-    }
+    };
 
-    // TODO - 添加series id
+    this.getSid = function(){
+        return sid;
+    };
+
+    this.setSid = function(si){
+        sid = si;
+    }
 }
 
 exports.User = User;
