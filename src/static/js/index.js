@@ -30,7 +30,9 @@ $(function(){
         }
     });
     $('#submitInfo').click(function(){
-        // TODO - validate
+        if(!userInfoValidate()){
+            return;
+        }
         $.ajax({
             url: '/select',
             data: {
@@ -177,5 +179,40 @@ $(function(){
                 _errCount++;
             }
         })
+    }
+
+    function userInfoValidate(){
+        var errorMsg = {
+            userNameMaxLength: 'User name should not be more than 20 charaters.',
+            roomIdNull: 'Room ID should not be blank.',
+            roomIdNumeric: 'Room ID should be numeric.',
+            roomIdMax: 'Room ID should not be larger than 50.'
+        };
+        var nameVal = $('#myName').val(), 
+            roomVal = $('#myRoomId').val(), 
+            isNew = $('#newRoom').get(0).checked,
+            msg;
+        if(nameVal.length > 20){
+            msg = errorMsg.userNameMaxLength;
+            // TODO - input warning
+        }
+        if(!isNew){
+            if(roomVal.length === 0){
+                msg = errorMsg.roomIdNull;
+                // TODO - input warning
+            }else if(!/^[1-9][0-9]*$/.test(roomVal)){
+                msg = errorMsg.roomIdNumeric;
+                // TODO - input warning
+            }else if(parseInt(roomVal, 10) > 50){
+                msg = errorMsg.roomIdMax;
+                // TODO - input warning
+            }
+        }
+        if(msg){
+            toast(msg);
+            return false;
+        }else{
+            return true;
+        }
     }
 });
