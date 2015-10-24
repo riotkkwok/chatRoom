@@ -89,7 +89,9 @@ $(function(){
     });
     $('#submitBtn').click(function(){
         var content = $('#myMsg').val();
-        // TODO - validate
+        if(!messageValidate()){
+            return;
+        }
         $('#myMsg').attr('readonly', true).addClass('freeze');
         $.ajax({
             url: '/send',
@@ -207,6 +209,28 @@ $(function(){
                 msg = errorMsg.roomIdMax;
                 // TODO - input warning
             }
+        }
+        if(msg){
+            toast(msg);
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    function messageValidate(){
+        var errorMsg = {
+            userInvalid: 'User is invalid, please re-login.',
+            contentNull: 'Content should not be blank.',
+        };
+        var content =  $('#myMsg').val(), msg;
+        if(content.length === 0){
+            msg = errorMsg.contentNull;
+            // TODO - textarea warning
+        }
+        if(!_userSid){
+            msg = errorMsg.userInvalid;
+            // TODO - textarea warning
         }
         if(msg){
             toast(msg);
