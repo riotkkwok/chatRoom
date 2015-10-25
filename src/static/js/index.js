@@ -70,19 +70,15 @@ $(function(){
                 'roomId': _roomId,
             },
             dataType: 'json',
-            success: function(rs){
-                toast('正在退出...');
-                setTimeout(function(){
-                    location.reload();
-                }, 3000);
-            },
-            error: function(){
-                toast('正在退出...');
-                setTimeout(function(){
-                    location.reload();
-                }, 3000);
-            }
+            success: cb,
+            error: cb
         });
+        function cb(){
+            var d = toast('正在退出...');
+            d.done(function(){
+                location.reload();
+            });
+        }
     });
     $('#myMsg').click(function(){
         ;
@@ -134,12 +130,14 @@ $(function(){
     }
 
     function toast(str){
-        // TODO - 添加Deferred
         console.log('toast: '+str);
+        var def = $.Deferred();
         $('#toast').addClass('show-toast').children('p').text(str);
         setTimeout(function(){
             $('#toast').removeClass('show-toast').children('p').text('');
+            def.resolve();
         }, 3000);
+        return def;
     }
 
     function checkMsg(){
