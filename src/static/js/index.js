@@ -53,9 +53,9 @@ $(function(){
                     toast(rs.errorMsg || '发送失败，请重试！');
                 }
             },
-            error: function(){
-                $('#selectRoom').addClass('hidden');
-                // TODO
+            error: function(xhr){
+                var d = toast('临时工把服务器扔了，正在地毯式搜索......');
+                d.done(fatalErrorHandler);
             }
         })
     });
@@ -236,5 +236,9 @@ $(function(){
         }else{
             return true;
         }
+    }
+
+    function fatalErrorHandler(){
+        location.href = '/static/html/404.html';
     }
 });
