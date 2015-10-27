@@ -3,7 +3,9 @@ function User(n, i, ri, si){
     id = i || null,
     roomId = ri || null,
     messages = [],
-    sid = si;
+    sid = si,
+    createTime = (+new Date()),
+    lastConnTime = createTime;
 
     this.getName = function() {
         return name;
@@ -41,7 +43,19 @@ function User(n, i, ri, si){
 
     this.setSid = function(si){
         sid = si;
-    }
+    };
+
+    this.getCreateTime = function(){
+        return createTime;
+    };
+
+    this.setLastConnTime = function(lct){
+        lastConnTime = lct;
+    };
+
+    this.getLastConnTime = function(){
+        return lastConnTime;
+    };
 }
 
 exports.User = User;

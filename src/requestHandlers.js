@@ -9,7 +9,8 @@ var url = require("url"),
 var userList = [],
     roomList = [],
     USER_MAX_SIZE = 50,
-    ROOM_MAX_SIZE = 10;
+    ROOM_MAX_SIZE = 10,
+    USER_TIMEOUT_LENGTH = 10*60*1000;
 
 var isDebug = true; // default is false
 
@@ -189,6 +190,27 @@ function generateSid4User(user){
     return sha1.digest('hex');
 }
 
+function userLeaveRoom(user, room){
+    room.removeUser(user.getSid());
+    removeUser(user.getSid());
+    if(room.getUsers().length === 0){
+        removeRoom(room.getId());
+    }else{
+        sendSysMsg(room.getUsers(), 'userOut', user);
+    }
+}
+
+function userLoginCheckingJob(){
+    var user, room;
+    for(var i=0; i<userList.length; i++){
+        user = userList[i];
+        if(+new Date() - user.getLastConnTime() > USER_TIMEOUT_LENGTH){
+            room = getRoom(user.getRoomId());
+            userLeaveRoom(user, room);
+        }
+    }
+}
+
 function start(resp){
     console.log(logDatetime() + " - Request handler 'start' was called.");
 
@@ -295,6 +317,8 @@ function send(resp, req){
         }));
         resp.end();
         return ;
+    }else{
+        user.setLastConnTime(+new Date());
     }
     room = getRoom(user.getRoomId());
     if(!room){
@@ -345,6 +369,8 @@ function check(resp, req){
         }));
         resp.end();
         return ;
+    }else{
+        user.setLastConnTime(+new Date());
     }
     msgLsObj = user.popAllMessage();
     msgLs = [];
@@ -398,13 +424,7 @@ function end(resp, req){
         resp.end();
         return ;
     }
-    room.removeUser(user.getSid());
-    removeUser(user.getSid());
-    if(room.getUsers().length === 0){
-        removeRoom(room.getId());
-    }else{
-        sendSysMsg(room.getUsers(), 'userOut', user);
-    }
+    userLeaveRoom(user, room);
     resp.writeHead(200,{"Content-Type":"text/plain"});
     resp.write(JSON.stringify({
         status: 0,
@@ -418,6 +438,10 @@ function end(resp, req){
     }
     return ;
 }
+
+setInterval(function(){
+    userLoginCheckingJob();
+}, 10000);
 
 exports.start = start;
 exports.getIn = getIn;

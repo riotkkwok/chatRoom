@@ -157,22 +157,25 @@ $(function(){
             },
             dataType: 'json',
             success: function(rs){
-                if(rs.data && rs.data.messages){
-                    if(rs.status === 0){
-                        _errCount = 0;
-                    }
-                    for(var i=0; i<rs.data.messages.length; i++){
-                        if(rs.data.messages[i].isSys){
-                            $('#msgList').append(msgHTML2
-                                .replace('###content###', rs.data.messages[i].content));
-                        }else{
-                            $('#msgList').append(msgHTML
-                                .replace('###me###', '')
-                                .replace('###username###', rs.data.messages[i].senderName||'')
-                                .replace('###userid###', rs.data.messages[i].senderId||'')
-                                .replace('###content###', rs.data.messages[i].content));
+                if(rs.data && rs.status === 0){
+                    _errCount = 0;
+                    if(rs.data.messages){
+                        for(var i=0; i<rs.data.messages.length; i++){
+                            if(rs.data.messages[i].isSys){
+                                $('#msgList').append(msgHTML2
+                                    .replace('###content###', rs.data.messages[i].content));
+                            }else{
+                                $('#msgList').append(msgHTML
+                                    .replace('###me###', '')
+                                    .replace('###username###', rs.data.messages[i].senderName||'')
+                                    .replace('###userid###', rs.data.messages[i].senderId||'')
+                                    .replace('###content###', rs.data.messages[i].content));
+                            }
                         }
                     }
+                }else{
+                    _errCount++;
+                    toast(rs.errorMsg || '服务器连接失败，正在重试！');
                 }
             },
             error: function(){
@@ -241,4 +244,6 @@ $(function(){
     function fatalErrorHandler(){
         location.href = '/static/html/404.html';
     }
+
+    // TODO - error handler
 });
