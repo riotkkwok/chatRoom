@@ -10,6 +10,22 @@
 ## 技术实现
 基于HTML+CSS3+JS(jQuery)实现前端UI交互／数据请求的功能，后端使用nodejs。目前除了404页面以外，大部分功能都是在同一个页面上呈现。
 
+### 页面请求
+/ or /start 
+进入页面
+
+/select
+输入用户名，进入聊天室
+
+/send
+发送消息
+
+/check
+检查是否有消息需要接收
+
+/end
+离开聊天室
+
 ## 浏览器兼容
 主要考虑移动端的iOS和Android，PC端的Firefox和Chrome，Mac端的Safari、Chrome和Firefox。
 
