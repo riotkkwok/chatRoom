@@ -4,6 +4,8 @@ a {outline: 0;text-decoration: none}
 body {font-size: 10px;font-family: "Helvetica Neue",Helvetica,STHeiTi,sans-serif;margin-top: 0;}
 img,video {vertical-align: bottom}
 ul {list-style-type: none}
+.cf,.clearfix{zoom:1; overflow: hidden}
+.cf:after,.clearfix:after{content:"";display:block;height:0;clear:both;visibility:hidden}
 .hidden{
     display: none !important;
 }
@@ -42,6 +44,8 @@ ul {list-style-type: none}
     background-color: #999999;
 }
 .msg-box{
+    overflow-x: hidden;
+    overflow-y: scroll;
     min-height: 100px;
     border: 1px solid #CD9B1D;
     background-color: #FFFFE0;
@@ -228,3 +232,15 @@ ul {list-style-type: none}
     80% {opacity: 1;}
     100% {opacity: 0;}
 }
+
+@media only screen and (max-width: 480px) and (max-device-width: 480px){
+    .main{
+        width: 100%;
+    }
+    .text-box{
+        width: 96%;
+        margin: 0 2%;
+    }
+}
+
+/* TODO - mobile UI compatibility for .msg-box */

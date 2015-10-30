@@ -117,6 +117,10 @@ $(function(){
     });
     /* 聊天窗口 [end] */
 
+    $(window).on('resize', calcMsgBoxHeight);
+
+    calcMsgBoxHeight();
+
     function init(data){
         _userId = data.userId;
         _userSid = data.userSid;
@@ -243,6 +247,12 @@ $(function(){
 
     function fatalErrorHandler(){
         location.href = '/static/html/404.html';
+    }
+
+    function calcMsgBoxHeight(){
+        var winH = $(window).height(), tmpH = 100;
+        tmpH = Math.max(winH - $('.header').height() - $('.my-box').get(0).clientHeight, tmpH);
+        $('.msg-box').height(tmpH);
     }
 
     // TODO - error handler
