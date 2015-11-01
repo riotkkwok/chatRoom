@@ -1,5 +1,5 @@
 $(function(){
-    var _userId, _userSid, _roomId, _userName, _checkTS, _errCount = 0;
+    var _userId, _userSid, _roomId, _userName, _checkTS, _errCount = 0, _loadingState = false;
 
     var msgHTML = '<li class="msg-item ###me###">'
         + '<div class="msg-wrapper">'
@@ -20,6 +20,8 @@ $(function(){
         + '<div class="msg-content">###content###</div>'
         + '</div>'
         + '</li>';
+
+    animateLoading();
 
     /* 信息输入框 [start] */
     $('#newRoom').click(function(){
@@ -253,6 +255,31 @@ $(function(){
         var winH = $(window).height(), tmpH = 100;
         tmpH = Math.max(winH - $('.header').height() - $('.my-box').get(0).clientHeight, tmpH);
         $('.msg-box').height(tmpH);
+        _loadingState = true;
+    }
+
+    function animateLoading(){
+        var d1 = $.Deferred(), d2 = $.Deferred();
+        d1.done(function(){
+            $('#loadingBar').removeClass('loadingAnim2').addClass('loadingAnim3');
+            setTimeout(function(){
+                d2.resolve();
+            }, 200);
+        });
+        d2.done(function(){
+            $('#initLoading').addClass('hidden');
+            $('#main').removeClass('invisible');
+        });
+        setTimeout(function(){
+            $('#loadingBar').removeClass('loadingAnim1').addClass('loadingAnim2');
+            var its = setInterval(function(){
+                if(_loadingState){
+                    clearInterval(its);
+                    d1.resolve();
+                }
+            }, 1000)
+        }, 4000);
+        $('#loadingBar').addClass('loadingAnim1');
     }
 
     // TODO - error handler

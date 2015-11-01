@@ -9,6 +9,9 @@ ul {list-style-type: none}
 .hidden{
     display: none !important;
 }
+.invisible{
+    opacity: 0 !important;
+}
 .main{
     color: #666666;
     font-size: 14px;
@@ -234,6 +237,93 @@ ul {list-style-type: none}
     100% {opacity: 0;}
 }
 
+.loading{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #ffffff;
+    z-index: 20;
+}
+.icon-wrapper{
+    position: relative;
+    top: 30%;
+    overflow: hidden;
+    width: 480px;
+    margin: 0 auto;
+}
+.icon-wrapper .icon{
+    position: relative;
+    left: -160px;
+    height: 300px;
+    width: 400px;
+    background: url(../images/loading.gif) right center no-repeat;
+    background-size: 100% 100%;
+    animation: iconAnim 4s infinite forwards linear;
+    -webkit-animation: iconAnim 4s infinite forwards linear;
+}
+.loading-bar{
+    position: relative;
+    height: 4px;
+    width: 0;
+    margin: -100px 25% 20px;
+    background-color: #00ff72;
+}
+.loading-txt{
+    position: relative;
+    color: #00ff72;
+    font-size: 18px;
+    text-align: center;
+}
+.loadingAnim1{
+    animation: progressAnim1 4s 1 forwards linear;
+    -webkit-animation: progressAnim1 4s 1 forwards linear;
+}
+.loadingAnim2{
+    animation: progressAnim2 1s 1 forwards linear;
+    -webkit-animation: progressAnim2 1s 1 forwards linear;
+}
+.loadingAnim3{
+    animation: progressAnim3 0.2s 1 forwards linear;
+    -webkit-animation: progressAnim3 0.2s 1 forwards linear;
+}
+
+@-keyframes iconAnim{
+    0% {left: -220px;}
+    100% {left: 300px;}
+}
+@-webkit-keyframes iconAnim{
+    0% {left: -220px;}
+    100% {left: 300px;}
+}
+@-keyframes progressAnim1{
+    0% {width: 0;}
+    100% {width: 40%;}
+}
+@-webkit-keyframes progressAnim1{
+    0% {width: 0;}
+    100% {width: 40%;}
+}
+@-keyframes progressAnim2{
+    0% {width: 40%;}
+    100% {width: 46%;}
+}
+@-webkit-keyframes progressAnim2{
+    0% {width: 40%;}
+    100% {width: 46%;}
+}
+@-keyframes progressAnim3{
+    0% {width: 46%;}
+    100% {width: 50%;}
+}
+@-webkit-keyframes progressAnim3{
+    0% {width: 46%;}
+    100% {width: 50%;}
+}
+
 @media only screen and (max-width: 480px) and (max-device-width: 480px){
     .main{
         width: 100%;
@@ -241,6 +331,21 @@ ul {list-style-type: none}
     .text-box{
         width: 96%;
         margin: 0 2%;
+    }
+    .icon-wrapper{
+        width: 320px;
+    }
+    .icon-wrapper .icon{
+        height: 150px;
+        width: 200px;
+    }
+    .loading-bar{
+        height: 2px;
+        margin-top: -50px;
+    }
+    @-webkit-keyframes iconAnim{
+        0% {left: -110px;}
+        100% {left: 230px;}
     }
 }
 
