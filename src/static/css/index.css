@@ -291,7 +291,7 @@ ul {list-style-type: none}
     -webkit-animation: progressAnim3 0.2s 1 forwards linear;
 }
 
-@-keyframes iconAnim{
+@keyframes iconAnim{
     0% {left: -220px;}
     100% {left: 300px;}
 }
@@ -299,7 +299,7 @@ ul {list-style-type: none}
     0% {left: -220px;}
     100% {left: 300px;}
 }
-@-keyframes progressAnim1{
+@keyframes progressAnim1{
     0% {width: 0;}
     100% {width: 40%;}
 }
@@ -307,7 +307,7 @@ ul {list-style-type: none}
     0% {width: 0;}
     100% {width: 40%;}
 }
-@-keyframes progressAnim2{
+@keyframes progressAnim2{
     0% {width: 40%;}
     100% {width: 46%;}
 }
@@ -315,7 +315,7 @@ ul {list-style-type: none}
     0% {width: 40%;}
     100% {width: 46%;}
 }
-@-keyframes progressAnim3{
+@keyframes progressAnim3{
     0% {width: 46%;}
     100% {width: 50%;}
 }
