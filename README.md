@@ -29,3 +29,10 @@
 ## 浏览器兼容
 主要考虑移动端的iOS和Android，PC端的Firefox和Chrome，Mac端的Safari、Chrome和Firefox。
 
+## 计划实现功能／改进
+* 实现Websocket通信，且在不支持的浏览器继续使用ajax轮询
+* 使用Session／cookie实现登陆状态保持
+* 使用Express
+* 使用Angular或Vue改写前端代码
+* 支持URL地址显示
+* 支持图片发送
