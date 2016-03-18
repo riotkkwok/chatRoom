@@ -20,7 +20,8 @@ var isDebug = true; // default is false
  * 1 - common error
  * 2 - error needs to re-login
  *
- * ajax response status [start] */
+ * ajax response status [start] 
+ */
 
 function createUser(name, roomId){
     var newItem, tmp;
