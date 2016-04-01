@@ -14,3 +14,4 @@ handle.staticReader = staticReader.readFile;
 
 
 server.start(router.route, handle);
+server.getIPAdress();
