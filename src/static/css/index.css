@@ -127,6 +127,9 @@ ul {list-style-type: none}
     left: auto;
     right: -12px;
 }
+.msg-link{
+    color: #0000ff;
+}
 .my-box{
     padding: 20px 0;
 }

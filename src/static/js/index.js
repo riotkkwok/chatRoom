@@ -1,6 +1,8 @@
 $(function(){
     var _userId, _userSid, _roomId, _userName, _checkTS, _errCount = 0, _loadingState = false;
 
+    var __DEBUG = /debug=1/.test(location.search);
+
     var msgHTML = '<li class="msg-item ###me###">'
         + '<div class="msg-wrapper">'
         + '<div class="msg-sender">'
@@ -10,16 +12,12 @@ $(function(){
         + '<div class="msg-content">###content###</div>'
         + '</div>'
         + '</li>',
-    msgHTML2 = '<li class="msg-item sys">'
+    sysMsgHTML = '<li class="msg-item sys">'
         + '<div class="msg-wrapper">'
         + '<div class="msg-content sys">###content###</div>'
         + '</div>'
         + '</li>',
-    sysMsgHTML = '<li class="msg-item sys">'
-        + '<div class="msg-wrapper">'
-        + '<div class="msg-content">###content###</div>'
-        + '</div>'
-        + '</li>';
+    linkHTML = '<a class="msg-link" href="###link###">###link###</a>';
 
     animateLoading();
 
@@ -35,6 +33,7 @@ $(function(){
         if(!userInfoValidate()){
             return;
         }
+        debugLog('name: '+$('#myName').val());
         $.ajax({
             url: '/select',
             data: {
@@ -101,11 +100,12 @@ $(function(){
             success: function(rs){
                 if(rs.data && rs.status === 0){
                     $('#myMsg').val('').removeAttr('readonly').removeClass('freeze');
-                    $('#msgList').append(msgHTML
-                        .replace('###me###', 'me')
-                        .replace('###username###', _userName)
-                        .replace('###userid###', _userId)
-                        .replace('###content###', content));
+                    renderMsg({
+                        sender: _userName,
+                        senderId: _userId,
+                        content: content,
+                        isMe: true
+                    });
                 }else{
                     $('#myMsg').removeAttr('readonly').removeClass('freeze');
                     toast(rs.errorMsg || '发送失败，请重试！');
@@ -133,6 +133,7 @@ $(function(){
         $('#leaveBtn').removeClass('hidden');
         $('#username').text(_userName+'('+_userId+')');
         _checkTS = setInterval(checkMsg, 5000);
+        debugLog('sid: '+_userSid);
     }
 
     function toast(str){
@@ -168,16 +169,21 @@ $(function(){
                     if(rs.data.messages){
                         for(var i=0; i<rs.data.messages.length; i++){
                             if(rs.data.messages[i].isSys){
-                                $('#msgList').append(msgHTML2
+                                $('#msgList').append(sysMsgHTML
                                     .replace('###content###', rs.data.messages[i].content));
+                                debugLog('sys msg: '+rs.data.messages[i].content);
                             }else{
-                                $('#msgList').append(msgHTML
-                                    .replace('###me###', '')
-                                    .replace('###username###', rs.data.messages[i].senderName||'')
-                                    .replace('###userid###', rs.data.messages[i].senderId||'')
-                                    .replace('###content###', rs.data.messages[i].content));
+                                renderMsg({
+                                    sender: rs.data.messages[i].senderName,
+                                    senderId: rs.data.messages[i].senderId,
+                                    content: rs.data.messages[i].content,
+                                    isMe: false
+                                });
+                                debugLog('get msg: '+rs.data.messages[i].content);
                             }
                         }
+                    }else{
+                        debugLog('no msg.');
                     }
                 }else{
                     _errCount++;
@@ -280,6 +286,29 @@ $(function(){
             }, 1000)
         }, 4000);
         $('#loadingBar').addClass('loadingAnim1');
+    }
+
+    function renderMsg(options){
+        var re = /http(?:s)?:\/\/(?:(?:\w|[^\x00-\xff])*(?:\.|\/|\?|\&|\=|\%)?)*/g, 
+            msgStr = options.content, links;
+        links = msgStr.match(re);
+        if(links){
+            for(var i=0; i<links.length; i++){
+                msgStr = msgStr.replace(links[i], linkHTML.replace(/###link###/g, links[i]));
+            }
+        }
+        $('#msgList').append(msgHTML
+            .replace('###me###', options.isMe ? 'me' : '')
+            .replace('###username###', options.sender || '')
+            .replace('###userid###', options.senderId || '')
+            .replace('###content###', msgStr));
+        $('.msg-box').scrollTop($('#msgList').height());
+    }
+
+    function debugLog(str){
+        if(__DEBUG){
+            console.log('['+(+new Date)+'] '+str);
+        }
     }
 
     // TODO - error handler
