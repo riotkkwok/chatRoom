@@ -34,5 +34,4 @@
 * 使用Session／cookie实现登陆状态保持
 * 使用Express
 * 使用Angular或Vue改写前端代码
-* 支持URL地址显示
 * 支持图片发送
