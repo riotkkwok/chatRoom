@@ -133,6 +133,18 @@ ul {list-style-type: none}
 .my-box{
     padding: 20px 0;
 }
+.toolbar{
+    border-radius: 3px;
+    box-shadow: 0 0 3px 0 #aaaaaa;
+    margin-bottom: 5px;
+    padding: 2px 5px;
+}
+.img-btn{
+    height: 32px;
+    width: 32px;
+    background: url(../images/img.jpg) center no-repeat;
+    background-size: 26px 28px;
+}
 .text-box{
     box-sizing: border-box;
     font-size: 14px;

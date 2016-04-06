@@ -1,13 +1,16 @@
 var url = require("url"),
     fs = require("fs"),
+    formidable = require("formidable"),
     crypto = require("crypto"),
     User = require("./user").User,
     Room = require("./room").Room,
     Message = require("./message").Message,
-    errorMsg = require("./errorMsg").errorMsg;
+    errorMsg = require("./errorMsg").errorMsg,
+    Img = require("./img").Img;
 
 var userList = [],
     roomList = [],
+    imgList = [],
     USER_MAX_SIZE = 50,
     ROOM_MAX_SIZE = 10,
     USER_TIMEOUT_LENGTH = 10*60*1000;
@@ -212,6 +215,20 @@ function userLoginCheckingJob(){
     }
 }
 
+function imgCheckingJob(){
+    var img;
+    for(var i=0; i<imgList.length; i++){
+        img = imgList[i];
+        if(+new Date() > img.getExpiry()){
+            fs.exists('./tmp/'+img.getName, function(exists){
+                fs.unlink('./tmp/'+img.getName, function(){
+                    imgList.shift();
+                })
+            });
+        }
+    }
+}
+
 function start(resp){
     console.log(logDatetime() + " - Request handler 'start' was called.");
 
@@ -352,6 +369,113 @@ function send(resp, req){
     return ;
 }
 
+function sendImg(resp, req){
+    console.log("Request handler 'sendImg' was called.");
+
+    if(isDebug){
+        console.log('DEBUG: '+url.parse(req.url, false).query);
+        console.log('DEBUG: '+JSON.stringify(userList));
+        console.log('DEBUG: '+JSON.stringify(roomList));
+    }
+
+    if(!checkSsid(resp, req.headers.cookie)){
+        return ;
+    }
+
+    var form = new formidable.IncomingForm();
+    form.parse(req,function(error, fields, files){
+        if(isDebug){
+            console.log(error);
+            console.log(fields);
+            console.log(files);
+        }
+
+        var params = fields,
+            user, room, userLs;
+        if(!params.sender && !params.fileName){
+            resp.writeHead(200,{"Content-Type":"text/html"});
+            resp.write("<script type=\"text/javascript\">"+
+                "window.parent.uploadListener('"+JSON.stringify({
+                    status: 1,
+                    errorMsg: errorMsg.invalidSenderContent
+                }) +"', true)"+
+                "</script>");
+            resp.end();
+            return ;
+        }
+        user = getUser(params.sender);
+        if(!user){
+            resp.writeHead(200,{"Content-Type":"text/html"});
+            resp.write("<script type=\"text/javascript\">"+
+                "window.parent.uploadListener('"+JSON.stringify({
+                    status: 1,
+                    errorMsg: errorMsg.senderNotFound
+                }) +"', true)"+
+                "</script>");
+            resp.end();
+            return ;
+        }else{
+            user.setLastConnTime(+new Date());
+        }
+        room = getRoom(user.getRoomId());
+        if(!room){
+            resp.writeHead(200,{"Content-Type":"text/html"});
+            resp.write("<script type=\"text/javascript\">"+
+                "window.parent.uploadListener('"+JSON.stringify({
+                    status: 1,
+                    errorMsg: errorMsg.chatRoomNotFound
+                }) +"', true)"+
+                "</script>");
+            resp.end();
+            return ;
+        }
+
+        var img = new Img(params.fileName);
+        imgList.push(img);
+        fs.renameSync(files.file.path, "./tmp/"+ img.getName());
+
+        userLs = room.getUsers();
+        for(var i=0; i<userLs.length; i++){
+            if(user.getSid() === userLs[i]){
+                continue;
+            }
+            getUser(userLs[i]).pushMessage(new Message(user.getId(), user.getName(), img.getName(), false, user.getSid(), true))
+        }
+
+        // resp.writeHead(500,{"Content-Type":"text/plain"});
+        resp.writeHead(200,{"Content-Type":"text/html"});
+        resp.write("<script type=\"text/javascript\">"+
+            "window.parent.uploadListener('"+img.getName() +"')"+
+            "</script>");
+        resp.end();
+    });
+}
+
+function showImg(resp, req){
+    console.log("Request handler 'showImg' was called.");
+
+    var params = url.parse(req.url, true).query,
+        fileName = params.n,
+        typeMap = {
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'png': 'image/png',
+            'gif': 'image/gif',
+        };;
+    fs.readFile('./tmp/'+fileName, 'binary', function (err, data) {//读取内容
+        if(err){
+            // return404(resp);
+            resp.writeHead(404, {"Content-Type": "text/plain"});
+            resp.write('404 Not Found');
+            resp.end();
+            return;
+        };
+        resp.writeHead(200, {"Content-Type": typeMap[fileName.split('.').pop()]});//注意这里
+        resp.write(data, 'binary');
+        resp.end();
+    });
+}
+
 function check(resp, req){
     // console.log("Request handler 'check' was called.");
 
@@ -381,6 +505,7 @@ function check(resp, req){
             'senderName': msgLsObj[i].getSenderName(),
             'content': msgLsObj[i].getContent(),
             'isSys': msgLsObj[i].getIsSys(),
+            'isImg': msgLsObj[i].getIsImg(),
         });
     }
     resp.writeHead(200,{"Content-Type":"text/plain"});
@@ -442,10 +567,13 @@ function end(resp, req){
 
 setInterval(function(){
     userLoginCheckingJob();
+    imgCheckingJob();
 }, 10000);
 
 exports.start = start;
 exports.getIn = getIn;
 exports.send = send;
+exports.sendImg = sendImg;
+exports.showImg = showImg;
 exports.check = check;
 exports.end = end;

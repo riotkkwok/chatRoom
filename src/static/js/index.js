@@ -17,7 +17,8 @@ $(function(){
         + '<div class="msg-content sys">###content###</div>'
         + '</div>'
         + '</li>',
-    linkHTML = '<a class="msg-link" href="###link###">###link###</a>';
+    linkHTML = '<a class="msg-link" href="###link###">###link###</a>',
+    imgHTML = '<img src="/showImg?n=###name###">';
 
     animateLoading();
 
@@ -117,6 +118,17 @@ $(function(){
             }
         });
     });
+    $('#imgBtn').on('click', function(){
+        $('#fileSelector').click();
+    });
+    $('#fileSelector').on('change', function(){
+        if(!$(this).get(0).files[0]){
+            return;
+        }
+        $('#fileSender').val(_userSid);
+        $('#fileName').val($(this).get(0).files[0].name);
+        $('#uploadForm').submit();
+    });
     /* 聊天窗口 [end] */
 
     $(window).on('resize', calcMsgBoxHeight);
@@ -177,6 +189,7 @@ $(function(){
                                     sender: rs.data.messages[i].senderName,
                                     senderId: rs.data.messages[i].senderId,
                                     content: rs.data.messages[i].content,
+                                    isImg: rs.data.messages[i].isImg,
                                     isMe: false
                                 });
                                 debugLog('get msg: '+rs.data.messages[i].content);
@@ -297,6 +310,9 @@ $(function(){
                 msgStr = msgStr.replace(links[i], linkHTML.replace(/###link###/g, links[i]));
             }
         }
+        if(options.isImg){
+            msgStr = imgHTML.replace('###name###', options.content);
+        }
         $('#msgList').append(msgHTML
             .replace('###me###', options.isMe ? 'me' : '')
             .replace('###username###', options.sender || '')
@@ -310,6 +326,15 @@ $(function(){
             console.log('['+(+new Date)+'] '+str);
         }
     }
+
+    window.uploadListener = function(name){
+        renderMsg({
+            sender: _userName,
+            senderId: _userId,
+            content: imgHTML.replace('###name###', name),
+            isMe: true
+        });
+    };
 
     // TODO - error handler
 });

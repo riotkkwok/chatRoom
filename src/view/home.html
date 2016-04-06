@@ -22,7 +22,10 @@
             <ul id="msgList" class="msg-list"></ul>
         </div>
         <div class="my-box">
-            <textarea id="myMsg" class="text-box" rows="6"></textarea>
+            <div class="toolbar">
+                <div id="imgBtn" class="img-btn"></div>
+            </div>
+            <textarea id="myMsg" class="text-box" rows="5"></textarea>
             <button id="submitBtn" class="act-btn">Submit</button>
         </div>
 
@@ -70,6 +73,15 @@
         </div>
     </div>
     <!-- loading [end] -->
+
+    <!-- upload image [start] -->
+    <form name="uploadForm" id="uploadForm" method="post" target="frameFile" enctype="multipart/form-data" action="/sendImg"> 
+        <input type="file" name="file" id="fileSelector" class="hidden"/>
+        <input type="hidden" name="sender" id="fileSender"/>
+        <input type="hidden" name="fileName" id="fileName"/>
+    </form>
+    <iframe id="frameFile" name="frameFile" class="hidden"></iframe>
+    <!-- upload image [end] -->
 
     <script type="text/javascript" src="/static/js/lib/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="/static/js/index.js"></script>
