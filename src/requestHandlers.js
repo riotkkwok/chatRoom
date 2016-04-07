@@ -219,12 +219,10 @@ function imgCheckingJob(){
     var img;
     for(var i=0; i<imgList.length; i++){
         img = imgList[i];
-        if(+new Date() > img.getExpiry()){
-            fs.exists('./tmp/'+img.getName, function(exists){
-                fs.unlink('./tmp/'+img.getName, function(){
-                    imgList.shift();
-                })
-            });
+        if(+new Date() > +img.getExpiry()){
+            fs.unlink('./tmp/'+img.getName(), function(){
+                imgList.shift();
+            })
         }
     }
 }
@@ -565,10 +563,21 @@ function end(resp, req){
     return ;
 }
 
-setInterval(function(){
-    userLoginCheckingJob();
-    imgCheckingJob();
-}, 10000);
+/* init method */
+!function(){
+    fs.readdir('./tmp', function(err, files){
+        if(err){
+            return;
+        }
+        for(var i=0; i<files.length; i++){
+            fs.unlink('./tmp/'+files[i]);
+        }
+    });
+    setInterval(function(){
+        userLoginCheckingJob();
+        imgCheckingJob();
+    }, 10000);
+}();
 
 exports.start = start;
 exports.getIn = getIn;

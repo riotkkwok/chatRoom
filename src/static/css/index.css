@@ -82,11 +82,11 @@ ul {list-style-type: none}
     font-size: 14px;
     word-break: break-all;
     white-space: normal;
-    line-height: 18px;
+    line-height: 16px;
     border-radius: 3px;
     box-shadow: 0 0 1px 0 #aaaaaa;
     margin: 0 6px;
-    padding: 2px 5px;
+    padding: 5px;
     background-color: #87CEFA;
 }
 .msg-content.sys{
@@ -120,6 +120,9 @@ ul {list-style-type: none}
     top: 5px;
     left: -12px;
     content: " ";
+}
+.msg-content img{
+    width: 100%;
 }
 .msg-item.me .msg-content:before{
     border-color: transparent transparent transparent #87CEFA;
