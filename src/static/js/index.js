@@ -302,7 +302,7 @@ $(function(){
     }
 
     function renderMsg(options){
-        var re = /http(?:s)?:\/\/(?:(?:\w|[^\x00-\xff])*(?:\.|\/|\?|\&|\=|\%)?)*/g, 
+        var re = /http(?:s)?:\/\/(?:(?:\w|[^\x00-\xff])*(?:\.|\/|\?|\&|\=|\%)?)*(?:\#(?:\w|[^\x00-\xff])*)?/g, 
             msgStr = options.content, links;
         links = msgStr.match(re);
         if(links){
