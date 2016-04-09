@@ -20,6 +20,12 @@
 /send
 发送消息（ajax请求）
 
+/sendImg
+发送图片消息（form post请求）
+
+/showImg
+显示图片（get请求）
+
 /check
 检查是否有消息需要接收（ajax请求）
 
@@ -29,6 +35,10 @@
 ## 浏览器兼容
 主要考虑移动端的iOS和Android，PC端的Firefox和Chrome，Mac端的Safari、Chrome和Firefox。
 
+## 已实现功能／改进
+* 支持URL地址显示 [2016.04.01]
+* 支持图片发送 [2016.04.06]
+
 ## 计划实现功能／改进
 * 实现Websocket通信，且在不支持的浏览器继续使用ajax轮询
 * 使用Session／cookie实现登陆状态保持
@@ -36,7 +46,3 @@
 * 使用Angular或Vue改写前端代码
 * 整理前端JS模版
 * 整理后端常用错误返回（404、500等）
-
-## 已实现功能／改进
-* 支持URL地址显示 [2016.04.01]
-* 支持图片发送 [2016.04.06]
