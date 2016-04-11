@@ -17,7 +17,7 @@ $(function(){
         + '<div class="msg-content sys">###content###</div>'
         + '</div>'
         + '</li>',
-    linkHTML = '<a class="msg-link" href="###link###">###link###</a>',
+    linkHTML = '<a class="msg-link" href="###link###" target="_blank">###link###</a>',
     imgHTML = '<img src="/showImg?n=###name###">';
 
     animateLoading();
@@ -302,7 +302,7 @@ $(function(){
     }
 
     function renderMsg(options){
-        var re = /http(?:s)?:\/\/(?:(?:\w|[^\x00-\xff])*(?:\.|\/|\?|\&|\=|\%)?)*(?:\#(?:\w|[^\x00-\xff])*)?/g, 
+        var re = /http(?:s)?:\/\/(?:(?:\w|[^\x00-\xff])*(?:\.|\/|\?|\&|\=|\%|\-|\:)?)*(?:\#(?:\w|[^\x00-\xff])*)?/g, 
             msgStr = options.content, links;
         links = msgStr.match(re);
         if(links){
