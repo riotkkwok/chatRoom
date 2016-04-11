@@ -6,7 +6,8 @@ var url = require("url"),
     Room = require("./room").Room,
     Message = require("./message").Message,
     errorMsg = require("./errorMsg").errorMsg,
-    Img = require("./img").Img;
+    Img = require("./img").Img,
+    logger = require("./logger").logger;
 
 var userList = [],
     roomList = [],
@@ -29,6 +30,8 @@ var isDebug = true; // default is false
 function createUser(name, roomId){
     var newItem, tmp;
     newItem = new User(name, null, roomId);
+    logger.debugLog('createUser()');
+    logger.debugLog(userList);
     if(userList.length === 0){
         newItem.setId(1);
         userList.push(newItem);
@@ -37,7 +40,7 @@ function createUser(name, roomId){
         return 0;
     }else{
         for(var i=0; i<userList.length; i++){
-            if(i + 1 < userList[i].getSid()){
+            if(i + 1 < userList[i].getId()){
                 newItem.setId(i+1);
                 tmp = userList.splice(i);
                 userList = userList.concat(newItem).concat(tmp);
@@ -51,7 +54,7 @@ function createUser(name, roomId){
         }
     }
     newItem.setSid(generateSid4User(newItem));
-    console.log(newItem.getSid());
+    logger.debugLog(userList);
     return newItem;
 }
 
@@ -228,7 +231,7 @@ function imgCheckingJob(){
 }
 
 function start(resp){
-    console.log(logDatetime() + " - Request handler 'start' was called.");
+    logger.debugLog("Request handler 'start' was called.");
 
     fs.readFile('./view/home.html', 'utf-8', function (err, data) {//读取内容
         if(err) throw err;
@@ -239,12 +242,12 @@ function start(resp){
 }
 
 function getIn(resp, req){
-    console.log(logDatetime() + " - Request handler 'getIn' was called.");
+    logger.debugLog("Request handler 'getIn' was called.");
 
     if(isDebug){
-        console.log('DEBUG: '+url.parse(req.url, false).query);
-        console.log('DEBUG: '+JSON.stringify(userList));
-        console.log('DEBUG: '+JSON.stringify(roomList));
+        logger.debugLog(url.parse(req.url, false).query);
+        logger.debugLog(userList);
+        logger.debugLog(roomList);
     }
 
     if(!checkSsid(resp, req.headers.cookie)){
@@ -293,20 +296,20 @@ function getIn(resp, req){
     }));
     resp.end();
     if(isDebug){
-        console.log('DEBUG: '+JSON.stringify(userList));
-        console.log('DEBUG: '+JSON.stringify(roomList));
-        console.log('DEBUG: handler finished.');
+        logger.debugLog(userList);
+        logger.debugLog(roomList);
+        logger.debugLog('handler finished.');
     }
     return ;
 }
 
 function send(resp, req){
-    console.log(logDatetime() + " - Request handler 'send' was called.");
+    logger.debugLog("Request handler 'send' was called.");
 
     if(isDebug){
-        console.log('DEBUG: '+url.parse(req.url, false).query);
-        console.log('DEBUG: '+JSON.stringify(userList));
-        console.log('DEBUG: '+JSON.stringify(roomList));
+        logger.debugLog(url.parse(req.url, false).query);
+        logger.debugLog(userList);
+        logger.debugLog(roomList);
     }
 
     if(!checkSsid(resp, req.headers.cookie)){
@@ -360,20 +363,20 @@ function send(resp, req){
     }));
     resp.end();
     if(isDebug){
-        console.log('DEBUG: userList '+JSON.stringify(userList));
-        console.log('DEBUG: roomList '+JSON.stringify(roomList));
-        console.log('DEBUG: handler finished.');
+        logger.debugLog(userList);
+        logger.debugLog(roomList);
+        logger.debugLog('handler finished.');
     }
     return ;
 }
 
 function sendImg(resp, req){
-    console.log("Request handler 'sendImg' was called.");
+    logger.debugLog("Request handler 'sendImg' was called.");
 
     if(isDebug){
-        console.log('DEBUG: '+url.parse(req.url, false).query);
-        console.log('DEBUG: '+JSON.stringify(userList));
-        console.log('DEBUG: '+JSON.stringify(roomList));
+        logger.debugLog(url.parse(req.url, false).query);
+        logger.debugLog(userList);
+        logger.debugLog(roomList);
     }
 
     if(!checkSsid(resp, req.headers.cookie)){
@@ -383,9 +386,9 @@ function sendImg(resp, req){
     var form = new formidable.IncomingForm();
     form.parse(req,function(error, fields, files){
         if(isDebug){
-            console.log(error);
-            console.log(fields);
-            console.log(files);
+            logger.debugLog(error);
+            logger.debugLog(fields);
+            logger.debugLog(files);
         }
 
         var params = fields,
@@ -450,7 +453,7 @@ function sendImg(resp, req){
 }
 
 function showImg(resp, req){
-    console.log("Request handler 'showImg' was called.");
+    logger.debugLog("Request handler 'showImg' was called.");
 
     var params = url.parse(req.url, true).query,
         fileName = params.n,
@@ -475,7 +478,7 @@ function showImg(resp, req){
 }
 
 function check(resp, req){
-    // console.log("Request handler 'check' was called.");
+    // logger.debugLog("Request handler 'check' was called.");
 
     if(!checkSsid(resp, req.headers.cookie)){
         return ;
@@ -516,19 +519,19 @@ function check(resp, req){
     resp.end();
 
     if(isDebug && msgLs.length>0){
-        console.log('DEBUG: check - '+JSON.stringify(msgLs));
+        logger.debugLog(msgLs);
     }
 
     return ;
 }
 
 function end(resp, req){
-    console.log(logDatetime() + " - Request handler 'end' was called.");
+    logger.debugLog("Request handler 'end' was called.");
 
     if(isDebug){
-        console.log('DEBUG: '+url.parse(req.url, false).query);
-        console.log('DEBUG: '+JSON.stringify(userList));
-        console.log('DEBUG: '+JSON.stringify(roomList));
+        logger.debugLog(url.parse(req.url, false).query);
+        logger.debugLog(userList);
+        logger.debugLog(roomList);
     }
 
     if(!checkSsid(resp, req.headers.cookie)){
@@ -546,6 +549,7 @@ function end(resp, req){
             errorMsg: errorMsg.userNotFound
         }));
         resp.end();
+        logger.errorLog('end() '+errorMsg.userNotFound);
         return ;
     }
     userLeaveRoom(user, room);
@@ -556,8 +560,8 @@ function end(resp, req){
     }));
     resp.end();
     if(isDebug){
-        console.log('DEBUG: '+JSON.stringify(userList));
-        console.log('DEBUG: '+JSON.stringify(roomList));
+        logger.debugLog(userList);
+        logger.debugLog(roomList);
         console.log('DEBUG: handler finished.');
     }
     return ;
