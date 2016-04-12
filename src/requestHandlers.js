@@ -36,7 +36,7 @@ function createUser(name, roomId){
         newItem.setId(1);
         userList.push(newItem);
     }else if(userList.length >= USER_MAX_SIZE){
-        console.warn('WARN: the user list reachs maximum.');
+        logger.warnLog('the user list reachs maximum.');
         return 0;
     }else{
         for(var i=0; i<userList.length; i++){
@@ -65,7 +65,7 @@ function createRoom(userId){
         newItem.setId(1);
         roomList.push(newItem);
     }else if(roomList.length >= ROOM_MAX_SIZE){
-        console.warn('WARN: the room list reachs maximum.');
+        logger.warnLog('the room list reachs maximum.');
         return 0;
     }else{
         for(var i=0; i<roomList.length; i++){
@@ -264,6 +264,7 @@ function getIn(resp, req){
             errorMsg: errorMsg.createUserFailed
         }));
         resp.end();
+        logger.errorLog('getIn() '+errorMsg.createUserFailed);
         return ;
     }
     if(params.newRoom === '1'){
@@ -279,6 +280,7 @@ function getIn(resp, req){
             errorMsg: errorMsg.createRoomFailed
         }));
         resp.end();
+        logger.errorLog('getIn() '+errorMsg.createRoomFailed);
         return ;
     }
     user.setRoomId(room.getId());
@@ -325,6 +327,7 @@ function send(resp, req){
             errorMsg: errorMsg.invalidSenderContent
         }));
         resp.end();
+        logger.errorLog('send() '+errorMsg.invalidSenderContent);
         return ;
     }
     user = getUser(params.sender);
@@ -335,6 +338,7 @@ function send(resp, req){
             errorMsg: errorMsg.senderNotFound
         }));
         resp.end();
+        logger.errorLog('send() '+errorMsg.senderNotFound);
         return ;
     }else{
         user.setLastConnTime(+new Date());
@@ -347,6 +351,7 @@ function send(resp, req){
             errorMsg: errorMsg.chatRoomNotFound
         }));
         resp.end();
+        logger.errorLog('send() '+errorMsg.chatRoomNotFound);
         return ;
     }
     userLs = room.getUsers();
@@ -402,6 +407,7 @@ function sendImg(resp, req){
                 }) +"', true)"+
                 "</script>");
             resp.end();
+            logger.errorLog('sendImg() '+errorMsg.invalidSenderContent);
             return ;
         }
         user = getUser(params.sender);
@@ -414,6 +420,7 @@ function sendImg(resp, req){
                 }) +"', true)"+
                 "</script>");
             resp.end();
+            logger.errorLog('sendImg() '+errorMsg.senderNotFound);
             return ;
         }else{
             user.setLastConnTime(+new Date());
@@ -428,6 +435,7 @@ function sendImg(resp, req){
                 }) +"', true)"+
                 "</script>");
             resp.end();
+            logger.errorLog('sendImg() '+errorMsg.chatRoomNotFound);
             return ;
         }
 
@@ -469,6 +477,7 @@ function showImg(resp, req){
             resp.writeHead(404, {"Content-Type": "text/plain"});
             resp.write('404 Not Found');
             resp.end();
+            logger.errorLog('showImg() '+'404 Not Found'+' - '+err);
             return;
         };
         resp.writeHead(200, {"Content-Type": typeMap[fileName.split('.').pop()]});//注意这里
@@ -494,6 +503,7 @@ function check(resp, req){
             errorMsg: errorMsg.userNotFound
         }));
         resp.end();
+        logger.errorLog('check() '+errorMsg.userNotFound);
         return ;
     }else{
         user.setLastConnTime(+new Date());
@@ -562,7 +572,7 @@ function end(resp, req){
     if(isDebug){
         logger.debugLog(userList);
         logger.debugLog(roomList);
-        console.log('DEBUG: handler finished.');
+        logger.debugLog('handler finished.');
     }
     return ;
 }

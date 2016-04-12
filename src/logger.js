@@ -1,6 +1,7 @@
 var line = '====================',
     prefix = {
         debug: '[DEBUG] ',
+        warn: '[WARN]',
         error: '[ERROR] '
     };
 
@@ -32,27 +33,29 @@ function objString(o){
     return result+' }';
 }
 
-function debug(s){
-    var now = new Date, str;
-    if(typeof s === 'object'){
-        str = objString(s);
-    }else{
-        str = s;
-    }
-    console.log(prefix.debug + dateString() + ' -- ' +str);
-    console.log(line);
-}
-
-function error(s){
+function log(s, type){
     var now = new Date, str = s;
     if(typeof str === 'object'){
         str = objString(str);
     }
-    console.log(prefix.error + dateString() + ' -- ' +str);
+    console.log(prefix[type] + dateString() + ' -- ' +str);
     console.log(line);
+}
+
+function debug(s){
+    log(s, 'debug');
+}
+
+function warn(s){
+    log(s, 'warn');
+}
+
+function error(s){
+    log(s, 'error');
 }
 
 exports.logger = {
     debugLog: debug,
+    warnLog: warn,
     errorLog: error
 };
