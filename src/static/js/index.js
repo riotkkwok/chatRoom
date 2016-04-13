@@ -315,9 +315,9 @@ $(function(){
         }
         $('#msgList').append(msgHTML
             .replace('###me###', options.isMe ? 'me' : '')
-            .replace('###username###', options.sender || '')
-            .replace('###userid###', options.senderId || '')
-            .replace('###content###', msgStr));
+            .replace('###username###', escape(options.sender) || '')
+            .replace('###userid###', escape(options.senderId) || '')
+            .replace('###content###', options.isImg ? msgStr : escape(msgStr)));
         $('.msg-box').scrollTop($('#msgList').height());
     }
 
@@ -331,10 +331,27 @@ $(function(){
         renderMsg({
             sender: _userName,
             senderId: _userId,
-            content: imgHTML.replace('###name###', name),
-            isMe: true
+            content: name,
+            isMe: true,
+            isImg: true
         });
     };
+
+    function escape(str){
+        var eMap = {
+            '<': '&#60;',
+            '>': '&#62;',
+            '"': '&#34;',
+            "'": '&#39;',
+            '&': '&#38;',
+        }
+        if(typeof str !== 'string'){
+            return str;
+        }
+        return str.replace(/[<>"'&]/g, function(s){
+            return eMap[s];
+        });
+    }
 
     // TODO - error handler
 });
