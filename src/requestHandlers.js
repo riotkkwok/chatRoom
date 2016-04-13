@@ -563,7 +563,7 @@ function end(resp, req){
         return ;
     }
     userLeaveRoom(user, room);
-    resp.writeHead(200,{"Content-Type":"text/plain"});
+    resp.writeHead(200,{"Content-Type":"text/plain", "Set-Cookie": "ssid=; expires="+(new Date(0).toGMTString())});
     resp.write(JSON.stringify({
         status: 0,
         data: {}
