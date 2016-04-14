@@ -303,21 +303,27 @@ $(function(){
 
     function renderMsg(options){
         var re = /http(?:s)?:\/\/(?:(?:\w|[^\x00-\xff])*(?:\.|\/|\?|\&|\=|\%|\-|\:)?)*(?:\#(?:\w|[^\x00-\xff])*)?/g, 
-            msgStr = options.content, links;
+            msgStr = options.content, links, str, tmp;
         links = msgStr.match(re);
-        if(links){
-            for(var i=0; i<links.length; i++){
-                msgStr = msgStr.replace(links[i], linkHTML.replace(/###link###/g, links[i]));
-            }
-        }
         if(options.isImg){
-            msgStr = imgHTML.replace('###name###', options.content);
+            msgStr = imgHTML.replace('###name###', msgStr);
+        }else if(links){
+            str = '';
+            for(var i=0; i<links.length; i++){
+                tmp = msgStr.split(links[i]);
+                str += escape(tmp[0]) + linkHTML.replace(/###link###/g, links[i]);
+                tmp.shift();
+                msgStr = tmp.join().replace(/\,/g, '');
+            }
+            msgStr = str + escape(msgStr);
+        }else{
+            msgStr = escape(msgStr);
         }
         $('#msgList').append(msgHTML
             .replace('###me###', options.isMe ? 'me' : '')
             .replace('###username###', escape(options.sender) || '')
             .replace('###userid###', escape(options.senderId) || '')
-            .replace('###content###', options.isImg ? msgStr : escape(msgStr)));
+            .replace('###content###', msgStr));
         $('.msg-box').scrollTop($('#msgList').height());
     }
 
