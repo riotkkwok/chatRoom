@@ -333,7 +333,8 @@ $(function(){
         }
     }
 
-    window.uploadListener = function(name){
+    window.uploadListener = function(name, isErr){
+        if(isErr) return;
         renderMsg({
             sender: _userName,
             senderId: _userId,
