@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <title>Home page - Chat Room</title>
+    <link rel="stylesheet" href="/static/css/index.css"></link>
+</head>
+<body>
+    <div id="main" class="main invisible">
+        <div class="header cf">
+            <div class="room-info">
+                Hello <span id="username"></span>, you're in Room #<span id="roomId"></span>
+            </div>
+            <button id="leaveBtn" class="act-btn2 hidden">Leave</button>
+        </div>
+        <div class="msg-box">
+            <ul id="msgList" class="msg-list"></ul>
+        </div>
+        <div class="my-box">
+            <div class="toolbar">
+                <div id="imgBtn" class="img-btn"></div>
+            </div>
+            <textarea id="myMsg" class="text-box" rows="5"></textarea>
+            <button id="submitBtn" class="act-btn">Submit</button>
+        </div>
+
+        <!-- select room dialog [start] -->
+        <div id="selectRoom" class="mask">
+            <div class="dialog">
+                <p>Please input user info below.</p>
+                <p>
+                    <label>New Room: </label>
+                    <input type="checkbox" id="newRoom" class="info-input" value="1">
+                </p>
+                <p id="roomRow">
+                    <label>Room ID: </label>
+                    <input type="text" id="myRoomId" class="info-input" maxLength="6" placeholder="Room ID">
+                </p>
+                <p>
+                    <label>User Name: </label>
+                    <input type="text" id="myName" class="info-input" maxLength="20" placeholder="Please input your name">
+                </p>
+                <button id="submitInfo" class="act-btn">Done</button>
+            </div>
+        </div>
+        <!-- select room dialog [end] -->
+
+        <!-- prompt [start] -->
+        <div id="prompt" class="mask hidden">
+            <div class="dialog">
+                <p id="promptMsg"></p>
+                <button id="confirmBtn" class="act-btn">OK</button>
+            </div>
+        </div>
+        <!-- prompt [end] -->
+
+        <!-- toast [start] -->
+        <div id="toast"><p></p></div>
+        <!-- toast [end] -->
+    </div>
+
+    <!-- loading [start] -->
+    <div class="loading" id="initLoading">
+        <div class="icon-wrapper">
+            <div class="icon"></div>
+            <div id="loadingBar" class="loading-bar"></div>
+            <p class="loading-txt">loading...</p>
+        </div>
+    </div>
+    <!-- loading [end] -->
+
+    <!-- upload image [start] -->
+    <form name="uploadForm" id="uploadForm" method="post" target="frameFile" enctype="multipart/form-data" action="/sendImg"> 
+        <input type="file" name="file" id="fileSelector" class="hidden"/>
+        <input type="hidden" name="sender" id="fileSender"/>
+        <input type="hidden" name="fileName" id="fileName"/>
+    </form>
+    <iframe id="frameFile" name="frameFile" class="hidden"></iframe>
+    <!-- upload image [end] -->
+
+    <script type="text/javascript" src="/static/js/lib/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="/static/js/index.js"></script>
+</body>
+</html>

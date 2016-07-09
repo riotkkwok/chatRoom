@@ -1,0 +1,370 @@
+html {font-size: 62.5%}
+html,body,div,ul,li,p,input,button,textarea {padding: 0;margin: 0;border: 0;outline: 0}
+a {outline: 0;text-decoration: none}
+body {font-size: 10px;font-family: "Helvetica Neue",Helvetica,STHeiTi,sans-serif;margin-top: 0;}
+img,video {vertical-align: bottom}
+ul {list-style-type: none}
+.cf,.clearfix{zoom:1; overflow: hidden}
+.cf:after,.clearfix:after{content:"";display:block;height:0;clear:both;visibility:hidden}
+.hidden{
+    display: none !important;
+}
+.invisible{
+    opacity: 0 !important;
+}
+.main{
+    color: #666666;
+    font-size: 14px;
+    width: 90%;
+    max-width: 960px;
+    margin: 0 auto;
+}
+.header{
+    color: #ffffff;
+    height: 32px;
+    padding: 0 10px;
+    background-color: #8B7765;
+}
+.header .room-info{
+    display: inline-block;
+    font-weight: bold;
+    line-height: 32px;
+}
+#username{
+    color: #87CEFA;
+}
+#leaveBtn{
+    float: right;
+}
+.act-btn2{
+    display: inline-block;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 26px;
+    border-radius: 2px;
+    margin: 3px 0;
+    padding: 0 5px;
+    background-color: #999999;
+}
+.msg-box{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    min-height: 100px;
+    border: 1px solid #CD9B1D;
+    background-color: #FFFFE0;
+}
+.msg-list{
+    padding: 5px;
+}
+.msg-item{
+    padding: 5px 0;
+}
+.msg-item.me{
+    text-align: right;
+}
+.msg-item.sys{
+    text-align: center;
+    padding-bottom: 0;
+}
+.msg-wrapper{
+    display: inline-block;
+}
+.msg-sender{
+    color: #666666;
+    font-size: 12px;
+    text-indent: 6px;
+    line-height: 20px;
+}
+.msg-content{
+    position: relative;
+    display: inline-block;
+    color: #000000;
+    font-size: 14px;
+    word-break: break-all;
+    white-space: normal;
+    line-height: 16px;
+    border-radius: 3px;
+    box-shadow: 0 0 1px 0 #aaaaaa;
+    margin: 0 6px;
+    padding: 5px;
+    background-color: #87CEFA;
+}
+.msg-content.sys{
+    position: static;
+    display: inline-block;
+    color: #aaaaaa;
+    font-size: 12px;
+    word-break: break-all;
+    white-space: normal;
+    line-height: 18px;
+    border-radius: none;
+    box-shadow: none;
+    margin: 0 6px;
+    padding: 2px 5px;
+    background-color: transparent;
+}
+.msg-content.sys:before{
+    position: static;
+    display: none;
+}
+.msg-content:before{
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    font-size: 0;
+    line-height: 0;
+    border-color: transparent #87CEFA transparent transparent;
+    border-style: dashed solid dashed dashed;
+    border-width: 6px;
+    position: absolute;
+    top: 5px;
+    left: -12px;
+    content: " ";
+}
+.msg-content img{
+    width: 100%;
+}
+.msg-item.me .msg-content:before{
+    border-color: transparent transparent transparent #87CEFA;
+    border-style: dashed dashed dashed solid;
+    left: auto;
+    right: -12px;
+}
+.msg-link{
+    color: #0000ff;
+}
+.my-box{
+    padding: 20px 0;
+}
+.toolbar{
+    border-radius: 3px;
+    box-shadow: 0 0 3px 0 #aaaaaa;
+    margin-bottom: 5px;
+    padding: 2px 5px;
+}
+.img-btn{
+    height: 32px;
+    width: 32px;
+    background: url(../images/img.jpg) center no-repeat;
+    background-size: 26px 28px;
+}
+.text-box{
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 18px;
+    width: 100%;
+    resize: none;
+    border: 1px solid #aaaaaa;
+    border-radius: 5px;
+    box-shadow: inset 0 0 3px 0 #aaaaaa;
+    padding: 5px 8px;
+}
+.text-box:focus{
+    box-shadow: inset 0 0 3px 0 #00BFFF;
+}
+.act-btn{
+    display: block;
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 36px;
+    height: 36px;
+    width: 50%;
+    border-radius: 3px;
+    margin: 10px auto 2px;
+    background-color: #32CD32;
+}
+.act-btn:active{
+    background-color: #228B22;
+}
+.mask{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0, 0.45);
+    z-index: 5;
+}
+.dialog{
+    box-sizing: border-box;
+    font-size: 14px;
+    width: 300px;
+    border-radius: 5px;
+    box-shadow: 0 0 6px 0 #000000;
+    margin: 200px auto 0;
+    padding: 5px;
+    background-color: #ffffff;
+}
+.dialog > p{
+    line-height: 20px;
+    padding: 3px 5px;
+}
+.dialog label{
+    display: inline-block;
+    width: 30%;
+}
+.dialog .info-input[type="text"]{
+    font-size: 14px;
+    line-height: 16px;
+    height: 18px;
+    border-bottom: 1px solid rgba(0,0,0, 0.25);
+    border-radius: 0;
+}
+.dialog .info-input[type="text"]:focus{
+    border-bottom: 1px solid #32CD32;
+}
+#toast{
+    position: fixed;
+    left: 0;
+    bottom: 20%;
+    display: none;
+    text-align: center;
+    width: 100%;
+    z-index: 10;
+}
+#toast.show-toast{
+    display: block;
+    opacity: 1;
+    animation: toastAnim 3s 1 forwards linear;
+    -webkit-animation: toastAnim 3s 1 forwards linear;
+}
+#toast > p{
+    display: inline-block;
+    color: #ffffff;
+    line-height: 20px;
+    height: 20px;
+    min-width: 80px;
+    border-radius: 3px;
+    box-shadow: 0 0 3px 0 #000000;
+    padding: 2px 10px;
+    background-color: rgba(0,0,0, 0.54);
+}
+
+@-keyframes toastAnim{
+    0% {opacity: 0;}
+    20% {opacity: 1;}
+    80% {opacity: 1;}
+    100% {opacity: 0;}
+}
+@-webkit-keyframes toastAnim{
+    0% {opacity: 0;}
+    20% {opacity: 1;}
+    80% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+.loading{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #ffffff;
+    z-index: 20;
+}
+.icon-wrapper{
+    position: relative;
+    top: 30%;
+    overflow: hidden;
+    width: 480px;
+    margin: 0 auto;
+}
+.icon-wrapper .icon{
+    position: relative;
+    left: -160px;
+    height: 300px;
+    width: 400px;
+    background: url(../images/loading.gif) right center no-repeat;
+    background-size: 100% 100%;
+    animation: iconAnim 4s infinite forwards linear;
+    -webkit-animation: iconAnim 4s infinite forwards linear;
+}
+.loading-bar{
+    position: relative;
+    height: 4px;
+    width: 0;
+    margin: -100px 25% 20px;
+    background-color: #00ff72;
+}
+.loading-txt{
+    position: relative;
+    color: #00ff72;
+    font-size: 18px;
+    text-align: center;
+}
+.loadingAnim1{
+    animation: progressAnim1 4s 1 forwards linear;
+    -webkit-animation: progressAnim1 4s 1 forwards linear;
+}
+.loadingAnim2{
+    animation: progressAnim2 1s 1 forwards linear;
+    -webkit-animation: progressAnim2 1s 1 forwards linear;
+}
+.loadingAnim3{
+    animation: progressAnim3 0.2s 1 forwards linear;
+    -webkit-animation: progressAnim3 0.2s 1 forwards linear;
+}
+
+@keyframes iconAnim{
+    0% {left: -220px;}
+    100% {left: 300px;}
+}
+@-webkit-keyframes iconAnim{
+    0% {left: -220px;}
+    100% {left: 300px;}
+}
+@keyframes progressAnim1{
+    0% {width: 0;}
+    100% {width: 40%;}
+}
+@-webkit-keyframes progressAnim1{
+    0% {width: 0;}
+    100% {width: 40%;}
+}
+@keyframes progressAnim2{
+    0% {width: 40%;}
+    100% {width: 46%;}
+}
+@-webkit-keyframes progressAnim2{
+    0% {width: 40%;}
+    100% {width: 46%;}
+}
+@keyframes progressAnim3{
+    0% {width: 46%;}
+    100% {width: 50%;}
+}
+@-webkit-keyframes progressAnim3{
+    0% {width: 46%;}
+    100% {width: 50%;}
+}
+
+@media only screen and (max-width: 480px) and (max-device-width: 480px){
+    .main{
+        width: 100%;
+    }
+    .text-box{
+        width: 96%;
+        margin: 0 2%;
+    }
+    .icon-wrapper{
+        width: 320px;
+    }
+    .icon-wrapper .icon{
+        height: 150px;
+        width: 200px;
+    }
+    .loading-bar{
+        height: 2px;
+        margin-top: -50px;
+    }
+    @-webkit-keyframes iconAnim{
+        0% {left: -110px;}
+        100% {left: 230px;}
+    }
+}
+
+/* TODO - mobile UI compatibility for .msg-box */
